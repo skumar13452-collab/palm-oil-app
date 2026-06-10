@@ -154,7 +154,7 @@ with left:
 
 with right:
 
-    price = st.number_input(
+    price_per_Tone = st.number_input(
         "Price Per Ton",
         min_value=0.0
     )
@@ -305,5 +305,5 @@ if os.path.exists(FILE_NAME):
         st.download_button(
             "📥 Download Excel Report",
             f,
-            file_name="PalmOilReport.xlsx"
+            file_name="RK_PalmOilReport.xlsx"
         )
