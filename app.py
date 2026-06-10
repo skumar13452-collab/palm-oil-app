@@ -3,36 +3,53 @@ import pandas as pd
 import plotly.express as px
 import os
 
-FILE_NAME = "harvest_data.xlsx"
-
+# ------------------------
+# CONFIG
+# ------------------------
 st.set_page_config(
     page_title="Anumolu's Palm Oil Management",
     page_icon="🌴",
     layout="wide"
 )
 
-# Header
+FILE_NAME = "harvest_data.xlsx"
+
+os.makedirs("uploads", exist_ok=True)
+
+# ------------------------
+# HEADER
+# ------------------------
 st.markdown("""
-<div style="
-background-color:#2E8B57;
-padding:15px;
-border-radius:10px;
-text-align:center;">
-<h1 style="color:white;">
-🌴 Anumolu's Palm Oil Management System
-</h1>
-<h4 style="color:white;">
-Harvest Tracking & Revenue Management
-</h4>
+<style>
+.main-header {
+    background: linear-gradient(90deg,#1b5e20,#4caf50);
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    color:white;
+}
+
+.metric-card {
+    background:#f1f8e9;
+    padding:15px;
+    border-radius:12px;
+    border-left:6px solid green;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class="main-header">
+    <h1>🌴 Anumolu's Palm Oil Management System</h1>
+    <h4>Harvest Tracking | Revenue Analytics | Card Management</h4>
 </div>
 """, unsafe_allow_html=True)
 
 st.write("")
 
-# Create uploads folder
-os.makedirs("uploads", exist_ok=True)
-
-# Load existing data
+# ------------------------
+# LOAD DATA
+# ------------------------
 if os.path.exists(FILE_NAME):
     df = pd.read_excel(FILE_NAME)
 else:
@@ -42,43 +59,59 @@ else:
         "Weight",
         "Price",
         "Amount",
+        "Card Number",
         "Image"
     ])
 
-# Dashboard Cards
+# ------------------------
+# KPI SECTION
+# ------------------------
 total_weight = df["Weight"].sum() if not df.empty else 0
-total_amount = df["Amount"].sum() if not df.empty else 0
+total_revenue = df["Amount"].sum() if not df.empty else 0
 avg_price = df["Price"].mean() if not df.empty else 0
+total_records = len(df)
 
-c1, c2, c3 = st.columns(3)
+c1, c2, c3, c4 = st.columns(4)
 
 c1.metric("🌴 Total Harvest", f"{total_weight:.2f} Tons")
-c2.metric("💰 Total Revenue", f"₹{total_amount:,.0f}")
-c3.metric("📈 Avg Price/Ton", f"₹{avg_price:,.0f}")
+c2.metric("💰 Total Revenue", f"₹{total_revenue:,.0f}")
+c3.metric("📈 Avg Price", f"₹{avg_price:,.0f}")
+c4.metric("📋 Records", total_records)
 
 st.divider()
 
-# Harvest Entry
+# ------------------------
+# HARVEST ENTRY
+# ------------------------
 st.subheader("➕ New Harvest Entry")
 
-col1, col2 = st.columns(2)
+left, right = st.columns(2)
 
-with col1:
+with left:
 
     date = st.date_input("Harvest Date")
 
     plot = st.selectbox(
         "Plot Name",
-        ["Plot-A", "Plot-B", "Plot-C"]
+        [
+            "North Plantation",
+            "South Plantation",
+            "East Plantation",
+            "West Plantation"
+        ]
+    )
+
+    card_no = st.text_input(
+        "Harvester Card Number"
     )
 
     weight = st.number_input(
-        "Weight (Tons)",
+        "Harvest Weight (Tons)",
         min_value=0.0,
         step=0.1
     )
 
-with col2:
+with right:
 
     price = st.number_input(
         "Price Per Ton",
@@ -91,18 +124,18 @@ with col2:
         f"💰 Total Amount : ₹{amount:,.2f}"
     )
 
-uploaded_file = st.file_uploader(
-    "Upload Harvester Card",
-    type=["jpg", "jpeg", "png"]
-)
-
-if uploaded_file:
-    st.image(
-        uploaded_file,
-        width=300
+    uploaded_file = st.file_uploader(
+        "Upload Harvester Card",
+        type=["jpg","jpeg","png"]
     )
 
-if st.button("💾 Save Record"):
+    if uploaded_file:
+        st.image(
+            uploaded_file,
+            width=300
+        )
+
+if st.button("💾 Save Harvest Record"):
 
     image_name = ""
 
@@ -126,11 +159,12 @@ if st.button("💾 Save Record"):
         "Weight":[weight],
         "Price":[price],
         "Amount":[amount],
+        "Card Number":[card_no],
         "Image":[image_name]
     })
 
     df = pd.concat(
-        [df, new_row],
+        [df,new_row],
         ignore_index=True
     )
 
@@ -145,40 +179,51 @@ if st.button("💾 Save Record"):
 
 st.divider()
 
-# Charts
+# ------------------------
+# ANALYTICS
+# ------------------------
 if not df.empty:
 
-    st.subheader("📊 Revenue by Plot")
+    col1, col2 = st.columns(2)
 
-    chart1 = px.bar(
-        df,
-        x="Plot",
-        y="Amount",
-        color="Plot"
-    )
+    with col1:
 
-    st.plotly_chart(
-        chart1,
-        use_container_width=True
-    )
+        st.subheader("📊 Revenue by Plantation")
 
-    st.subheader("📈 Harvest Trend")
+        fig1 = px.bar(
+            df,
+            x="Plot",
+            y="Amount",
+            color="Plot",
+            text_auto=True
+        )
 
-    chart2 = px.line(
-        df,
-        x="Date",
-        y="Weight",
-        markers=True
-    )
+        st.plotly_chart(
+            fig1,
+            use_container_width=True
+        )
 
-    st.plotly_chart(
-        chart2,
-        use_container_width=True
-    )
+    with col2:
+
+        st.subheader("📈 Harvest Trend")
+
+        fig2 = px.line(
+            df,
+            x="Date",
+            y="Weight",
+            markers=True
+        )
+
+        st.plotly_chart(
+            fig2,
+            use_container_width=True
+        )
 
 st.divider()
 
-# Records
+# ------------------------
+# RECORDS
+# ------------------------
 st.subheader("📋 Harvest Records")
 
 st.dataframe(
@@ -186,7 +231,9 @@ st.dataframe(
     use_container_width=True
 )
 
-# Download
+# ------------------------
+# DOWNLOAD
+# ------------------------
 if os.path.exists(FILE_NAME):
 
     with open(FILE_NAME, "rb") as file:
