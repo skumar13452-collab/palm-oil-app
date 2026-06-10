@@ -2,10 +2,10 @@ Python 3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (
 Enter "help" below or click "Help" above for more information.
 >>> import streamlit as st
 ... 
-... st.title("Palm Oil Harvest Management")
+... st.title("🌴 Palm Oil Harvest Management")
 ... 
-... weight = st.number_input("Weight (Tons)")
-... price = st.number_input("Price Per Ton")
+... weight = st.number_input("Weight (Tons)", min_value=0.0)
+... price = st.number_input("Price Per Ton", min_value=0.0)
 ... 
 ... total = weight * price
 ... 
