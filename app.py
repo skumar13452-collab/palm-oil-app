@@ -154,7 +154,7 @@ with left:
 
 with right:
 
-    price_per_Tone = st.number_input(
+    price = st.number_input(
         "Price Per Ton",
         min_value=0.0
     )
@@ -221,7 +221,7 @@ if st.button("💾 Save Harvest Record"):
         "Plot":[plot],
         "Card No":[card_no],
         "Weight":[weight],
-        "Price":[price],
+        "Price":[price per Tone],
         "Amount":[amount],
         "Remarks":[remarks],
         "Card Image":[card_name],
