@@ -1,5 +1,11 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
+from streamlit_option_menu import option_menu
+from datetime import datetime
+import os
+
+FILE_NAME = "harvest_data.xlsx"
 
 st.set_page_config(
     page_title="Palm Oil Management",
@@ -7,60 +13,134 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🌴 Palm Oil Harvest Management System")
-
-# Dashboard
-col1, col2, col3 = st.columns(3)
-
-col1.metric("Total Harvest", "120 Tons")
-col2.metric("Total Income", "₹22,50,000")
-col3.metric("Average Price", "₹18,750")
-
-st.divider()
-
-left, right = st.columns([2, 1])
-
-with left:
-    st.subheader("Harvest Entry")
-
-    date = st.date_input("Cutting Date")
-
-    plot = st.selectbox(
-        "Plot Name",
-        ["Plot-A", "Plot-B", "Plot-C"]
+# Sidebar
+with st.sidebar:
+    selected = option_menu(
+        "Palm Oil System",
+        ["Dashboard", "Harvest Entry", "Reports"],
+        icons=["speedometer2", "plus-circle", "bar-chart"],
+        menu_icon="tree-fill",
+        default_index=0,
     )
 
-    weight = st.number_input(
-        "Weight (Tons)",
-        min_value=0.0,
-        step=0.1
-    )
+# Load Data
+if os.path.exists(FILE_NAME):
+    df = pd.read_excel(FILE_NAME)
+else:
+    df = pd.DataFrame(columns=[
+        "Date",
+        "Plot",
+        "Weight",
+        "Price",
+        "Amount"
+    ])
 
-    price = st.number_input(
-        "Price Per Ton",
-        min_value=0.0
-    )
+# DASHBOARD
+if selected == "Dashboard":
 
-    total = weight * price
+    st.title("🌴 Palm Oil Dashboard")
 
-    st.success(f"Total Amount : ₹{total:,.2f}")
+    total_weight = df["Weight"].sum() if not df.empty else 0
+    total_amount = df["Amount"].sum() if not df.empty else 0
+    avg_price = df["Price"].mean() if not df.empty else 0
 
-    if st.button("💾 Save Record"):
-        st.success("Record Saved Successfully")
+    col1, col2, col3 = st.columns(3)
 
-with right:
-    st.subheader("Summary")
-    st.info("Current Harvest Details")
+    col1.metric("🌴 Total Harvest", f"{total_weight:.2f} Tons")
+    col2.metric("💰 Total Revenue", f"₹{total_amount:,.0f}")
+    col3.metric("📈 Avg Price/Ton", f"₹{avg_price:,.0f}")
 
-st.divider()
+    st.divider()
 
-st.subheader("Harvest Records")
+    if not df.empty:
 
-sample = pd.DataFrame({
-    "Date":["10-Jun-2026","20-Jun-2026"],
-    "Plot":["Plot-A","Plot-B"],
-    "Weight":[5.2,4.8],
-    "Amount":[96200,91200]
-})
+        chart = px.bar(
+            df,
+            x="Plot",
+            y="Amount",
+            color="Plot",
+            title="Revenue by Plot"
+        )
 
-st.dataframe(sample, use_container_width=True)
+        st.plotly_chart(chart, use_container_width=True)
+
+        trend = px.line(
+            df,
+            x="Date",
+            y="Weight",
+            markers=True,
+            title="Harvest Trend"
+        )
+
+        st.plotly_chart(trend, use_container_width=True)
+
+# ENTRY
+elif selected == "Harvest Entry":
+
+    st.title("➕ Harvest Entry")
+
+    with st.form("entry_form"):
+
+        date = st.date_input("Cutting Date")
+
+        plot = st.selectbox(
+            "Plot",
+            ["Plot-A", "Plot-B", "Plot-C"]
+        )
+
+        weight = st.number_input(
+            "Weight (Tons)",
+            min_value=0.0,
+            step=0.1
+        )
+
+        price = st.number_input(
+            "Price Per Ton",
+            min_value=0.0
+        )
+
+        amount = weight * price
+
+        st.success(f"Total Amount : ₹{amount:,.2f}")
+
+        submit = st.form_submit_button("💾 Save")
+
+        if submit:
+
+            new_row = pd.DataFrame({
+                "Date":[date],
+                "Plot":[plot],
+                "Weight":[weight],
+                "Price":[price],
+                "Amount":[amount]
+            })
+
+            df = pd.concat(
+                [df, new_row],
+                ignore_index=True
+            )
+
+            df.to_excel(FILE_NAME, index=False)
+
+            st.success("Record Saved Successfully")
+
+# REPORTS
+elif selected == "Reports":
+
+    st.title("📊 Reports")
+
+    if not df.empty:
+
+        st.dataframe(
+            df,
+            use_container_width=True
+        )
+
+        st.download_button(
+            "📥 Download Excel",
+            open(FILE_NAME, "rb"),
+            file_name="PalmOilReport.xlsx"
+        )
+
+    else:
+        st.info("No records available.")
