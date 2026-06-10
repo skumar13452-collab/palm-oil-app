@@ -61,8 +61,8 @@ else:
         "Plot",
         "Card No",
         "Weight",
-        "Price",
-        "Amount",
+        "Price Per Tone ",
+        "Total Amount",
         "Remarks",
         "Card Image",
         "Slip Image"
