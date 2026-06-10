@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from streamlit_option_menu import option_menu
-from datetime import datetime
 import os
+from PIL import Image
 
 FILE_NAME = "harvest_data.xlsx"
 
@@ -13,17 +13,20 @@ st.set_page_config(
     layout="wide"
 )
 
+# Create uploads folder
+os.makedirs("uploads", exist_ok=True)
+
 # Sidebar
 with st.sidebar:
     selected = option_menu(
-        "Palm Oil System",
+        "🌴 Palm Oil System",
         ["Dashboard", "Harvest Entry", "Reports"],
         icons=["speedometer2", "plus-circle", "bar-chart"],
         menu_icon="tree-fill",
         default_index=0,
     )
 
-# Load Data
+# Load data
 if os.path.exists(FILE_NAME):
     df = pd.read_excel(FILE_NAME)
 else:
@@ -32,10 +35,13 @@ else:
         "Plot",
         "Weight",
         "Price",
-        "Amount"
+        "Amount",
+        "Image"
     ])
 
+# ==========================
 # DASHBOARD
+# ==========================
 if selected == "Dashboard":
 
     st.title("🌴 Palm Oil Dashboard")
@@ -44,17 +50,17 @@ if selected == "Dashboard":
     total_amount = df["Amount"].sum() if not df.empty else 0
     avg_price = df["Price"].mean() if not df.empty else 0
 
-    col1, col2, col3 = st.columns(3)
+    c1, c2, c3 = st.columns(3)
 
-    col1.metric("🌴 Total Harvest", f"{total_weight:.2f} Tons")
-    col2.metric("💰 Total Revenue", f"₹{total_amount:,.0f}")
-    col3.metric("📈 Avg Price/Ton", f"₹{avg_price:,.0f}")
+    c1.metric("🌴 Total Harvest", f"{total_weight:.2f} Tons")
+    c2.metric("💰 Total Revenue", f"₹{total_amount:,.0f}")
+    c3.metric("📈 Avg Price/Ton", f"₹{avg_price:,.0f}")
 
     st.divider()
 
     if not df.empty:
 
-        chart = px.bar(
+        chart1 = px.bar(
             df,
             x="Plot",
             y="Amount",
@@ -62,9 +68,9 @@ if selected == "Dashboard":
             title="Revenue by Plot"
         )
 
-        st.plotly_chart(chart, use_container_width=True)
+        st.plotly_chart(chart1, use_container_width=True)
 
-        trend = px.line(
+        chart2 = px.line(
             df,
             x="Date",
             y="Weight",
@@ -72,19 +78,21 @@ if selected == "Dashboard":
             title="Harvest Trend"
         )
 
-        st.plotly_chart(trend, use_container_width=True)
+        st.plotly_chart(chart2, use_container_width=True)
 
-# ENTRY
+# ==========================
+# HARVEST ENTRY
+# ==========================
 elif selected == "Harvest Entry":
 
-    st.title("➕ Harvest Entry")
+    st.title("➕ New Harvest Entry")
 
-    with st.form("entry_form"):
+    with st.form("harvest_form"):
 
-        date = st.date_input("Cutting Date")
+        date = st.date_input("Harvest Date")
 
         plot = st.selectbox(
-            "Plot",
+            "Plot Name",
             ["Plot-A", "Plot-B", "Plot-C"]
         )
 
@@ -101,18 +109,41 @@ elif selected == "Harvest Entry":
 
         amount = weight * price
 
-        st.success(f"Total Amount : ₹{amount:,.2f}")
+        st.success(f"💰 Total Amount : ₹{amount:,.2f}")
 
-        submit = st.form_submit_button("💾 Save")
+        uploaded_file = st.file_uploader(
+            "Upload Harvester Card",
+            type=["jpg", "jpeg", "png"]
+        )
+
+        if uploaded_file:
+            st.image(uploaded_file, width=300)
+
+        submit = st.form_submit_button("💾 Save Record")
 
         if submit:
+
+            image_name = ""
+
+            if uploaded_file:
+
+                image_name = uploaded_file.name
+
+                image_path = os.path.join(
+                    "uploads",
+                    image_name
+                )
+
+                with open(image_path, "wb") as f:
+                    f.write(uploaded_file.getbuffer())
 
             new_row = pd.DataFrame({
                 "Date":[date],
                 "Plot":[plot],
                 "Weight":[weight],
                 "Price":[price],
-                "Amount":[amount]
+                "Amount":[amount],
+                "Image":[image_name]
             })
 
             df = pd.concat(
@@ -124,10 +155,12 @@ elif selected == "Harvest Entry":
 
             st.success("Record Saved Successfully")
 
+# ==========================
 # REPORTS
+# ==========================
 elif selected == "Reports":
 
-    st.title("📊 Reports")
+    st.title("📊 Harvest Reports")
 
     if not df.empty:
 
@@ -136,11 +169,32 @@ elif selected == "Reports":
             use_container_width=True
         )
 
-        st.download_button(
-            "📥 Download Excel",
-            open(FILE_NAME, "rb"),
-            file_name="PalmOilReport.xlsx"
-        )
+        st.subheader("Record Images")
+
+        for i, row in df.iterrows():
+
+            image_path = os.path.join(
+                "uploads",
+                str(row["Image"])
+            )
+
+            if os.path.exists(image_path):
+
+                st.write(
+                    f"Date: {row['Date']} | Plot: {row['Plot']}"
+                )
+
+                st.image(
+                    image_path,
+                    width=250
+                )
+
+        with open(FILE_NAME, "rb") as file:
+            st.download_button(
+                "📥 Download Excel",
+                file,
+                file_name="PalmOilReport.xlsx"
+            )
 
     else:
         st.info("No records available.")
