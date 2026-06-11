@@ -1,309 +1,250 @@
 import streamlit as st
-import pandas as pd
-import plotly.express as px
-import os
 
-# -----------------------------
-# CONFIG
-# -----------------------------
 st.set_page_config(
-    page_title="Anumolu's Palm Oil Management",
+    page_title="PalmTrack",
     page_icon="🌴",
     layout="wide"
 )
 
-FILE_NAME = "harvest_data.xlsx"
-
-os.makedirs("uploads/cards", exist_ok=True)
-os.makedirs("uploads/slips", exist_ok=True)
-
-# -----------------------------
-# LOGIN
-# -----------------------------
-USERNAME = "Anumolu"
-PASSWORD = "RK"
-
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-
-if not st.session_state.logged_in:
-
-    st.markdown("""
-    <div style='text-align:center;padding-top:50px'>
-        <h1 style='color:green'>
-            🌴 Anumolu's Palm Oil Management System
-        </h1>
-        <h3>Login</h3>
-    </div>
-    """, unsafe_allow_html=True)
-
-    user = st.text_input("Username")
-    pwd = st.text_input("Password", type="password")
-
-    if st.button("Login"):
-
-        if user == USERNAME and pwd == PASSWORD:
-            st.session_state.logged_in = True
-            st.rerun()
-        else:
-            st.error("Invalid Username or Password")
-
-    st.stop()
-
-# -----------------------------
-# LOAD DATA
-# -----------------------------
-if os.path.exists(FILE_NAME):
-    df = pd.read_excel(FILE_NAME)
-else:
-    df = pd.DataFrame(columns=[
-        "Date",
-        "Plot",
-        "Card No",
-        "Weight",
-        "Price Per Tone ",
-        "Total Amount",
-        "Remarks",
-        "Card Image",
-        "Slip Image"
-    ])
-
-# -----------------------------
-# CSS
-# -----------------------------
 st.markdown("""
 <style>
 
-.main-header{
-background: linear-gradient(90deg,#1B5E20,#43A047);
-padding:20px;
-border-radius:15px;
+.stApp{
+background: linear-gradient(135deg,#0d3d0d,#145214,#0d3d0d);
+}
+
+.main-title{
 text-align:center;
 color:white;
-margin-bottom:20px;
+font-size:40px;
+font-weight:bold;
+}
+
+.sub-title{
+text-align:center;
+color:#d0d0d0;
+margin-bottom:30px;
+}
+
+.phone{
+background:white;
+border-radius:25px;
+padding:15px;
+height:700px;
+box-shadow:0px 5px 20px rgba(0,0,0,0.3);
 }
 
 .card{
-background:white;
-padding:20px;
+background:#f5f5f5;
+padding:15px;
 border-radius:15px;
-box-shadow:0px 3px 8px rgba(0,0,0,0.1);
+margin-bottom:15px;
+}
+
+.green{
+background:#e9f7e9;
+}
+
+.metric{
+font-size:28px;
+font-weight:bold;
+color:#2e7d32;
+}
+
+.header{
+background:#2e7d32;
+padding:15px;
+border-radius:15px;
+color:white;
 text-align:center;
+margin-bottom:15px;
+}
+
+.feature{
+padding:15px;
+border-radius:15px;
+color:white;
+height:130px;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# -----------------------------
-# HEADER
-# -----------------------------
-col1,col2 = st.columns([10,1])
+st.markdown(
+    "<div class='main-title'>PalmTrack</div>",
+    unsafe_allow_html=True
+)
 
+st.markdown(
+    "<div class='sub-title'>Farm Management · Fruit Cutting · Fertilizer · Revenue</div>",
+    unsafe_allow_html=True
+)
+
+col1,col2,col3=st.columns(3)
+
+# DASHBOARD
 with col1:
+
+    st.markdown("<div class='phone'>",unsafe_allow_html=True)
+
     st.markdown("""
-    <div class="main-header">
-    <h1>🌴 Anumolu's Palm Oil Management System</h1>
-    <h4>Harvest Tracking • Revenue Analytics • Card Management</h4>
+    <div class='header'>
+    <h3>Dashboard</h3>
+    June 2026 - All Blocks
     </div>
-    """, unsafe_allow_html=True)
+    """,unsafe_allow_html=True)
 
-with col2:
-    st.write("")
-    st.write("")
-    if st.button("Logout"):
-        st.session_state.logged_in = False
-        st.rerun()
+    a,b=st.columns(2)
 
-# -----------------------------
-# KPI
-# -----------------------------
-total_weight = df["Weight"].sum() if not df.empty else 0
-total_amount = df["Amount"].sum() if not df.empty else 0
-avg_price = df["Price"].mean() if not df.empty else 0
-records = len(df)
+    with a:
+        st.markdown("""
+        <div class='card green'>
+        Total Harvest
+        <div class='metric'>4,820</div>
+        kg
+        </div>
+        """,unsafe_allow_html=True)
 
-c1,c2,c3,c4 = st.columns(4)
+    with b:
+        st.markdown("""
+        <div class='card'>
+        Fertilizer
+        <div class='metric'>380</div>
+        kg used
+        </div>
+        """,unsafe_allow_html=True)
 
-c1.metric("🌴 Total Harvest", f"{total_weight:.2f} Tons")
-c2.metric("💰 Total Revenue", f"₹{total_amount:,.0f}")
-c3.metric("📈 Avg Price", f"₹{avg_price:,.0f}")
-c4.metric("📋 Records", records)
+    st.markdown("""
+    <div class='card green'>
+    Revenue This Month
+    <div class='metric'>₹1,24,000</div>
+    </div>
+    """,unsafe_allow_html=True)
 
-st.divider()
-
-# -----------------------------
-# ENTRY FORM
-# -----------------------------
-st.subheader("➕ New Harvest Entry")
-
-left,right = st.columns(2)
-
-with left:
-
-    date = st.date_input("Harvest Date")
-
-    plot = st.text_input("Plot Name")
-
-    card_no = st.text_input("Harvester Card Number")
-
-    weight = st.number_input(
-        "Weight (Tons)",
-        min_value=0.0,
-        step=0.1
-    )
-
-with right:
-
-    price = st.number_input(
-        "Price Per Ton",
-        min_value=0.0
-    )
-
-    remarks = st.text_area(
-        "Remarks"
-    )
-
-    amount = weight * price
-
-    st.success(
-        f"💰 Total Amount : ₹{amount:,.2f}"
-    )
-
-card_image = st.file_uploader(
-    "Upload Harvester Card",
-    type=["jpg","jpeg","png"]
-)
-
-slip_image = st.file_uploader(
-    "Upload Weight Slip",
-    type=["jpg","jpeg","png"]
-)
-
-if card_image:
-    st.image(card_image,width=300)
-
-if slip_image:
-    st.image(slip_image,width=300)
-
-if st.button("💾 Save Harvest Record"):
-
-    card_name = ""
-    slip_name = ""
-
-    if card_image:
-
-        card_name = card_image.name
-
-        with open(
-            os.path.join(
-                "uploads/cards",
-                card_name
-            ),
-            "wb"
-        ) as f:
-            f.write(card_image.getbuffer())
-
-    if slip_image:
-
-        slip_name = slip_image.name
-
-        with open(
-            os.path.join(
-                "uploads/slips",
-                slip_name
-            ),
-            "wb"
-        ) as f:
-            f.write(slip_image.getbuffer())
-
-    new_row = pd.DataFrame({
-        "Date":[date],
-        "Plot":[plot],
-        "Card No":[card_no],
-        "Weight":[weight],
-        "Price":[price per Tone],
-        "Amount":[amount],
-        "Remarks":[remarks],
-        "Card Image":[card_name],
-        "Slip Image":[slip_name]
+    st.bar_chart({
+        "Block A":[70],
+        "Block B":[40],
+        "Block C":[60]
     })
 
-    df = pd.concat(
-        [df,new_row],
-        ignore_index=True
+    st.markdown("""
+    <div class='card'>
+    📅 Block C Cutting - 12 Jun
+    </div>
+    """,unsafe_allow_html=True)
+
+    st.markdown("</div>",unsafe_allow_html=True)
+
+# FRUIT CUTTING
+with col2:
+
+    st.markdown("<div class='phone'>",unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class='header'>
+    <h3>Fruit Cutting</h3>
+    Record & Track Harvest
+    </div>
+    """,unsafe_allow_html=True)
+
+    st.text_input("Date","10/06/2026")
+    st.text_input("Block","A")
+    st.text_input("Workers","6")
+    st.text_input("Qty (kg)","820")
+
+    st.button("➕ Add")
+
+    st.markdown("### Recent Records")
+
+    st.dataframe(
+        {
+            "Date":["10 Jun","09 Jun","08 Jun"],
+            "Block":["A","B","C"],
+            "Qty":[820,640,510]
+        },
+        use_container_width=True
     )
 
-    df.to_excel(FILE_NAME,index=False)
+    st.success("This Week Total : 3340 kg")
 
-    st.success(
-        "Record Saved Successfully"
+    st.markdown("</div>",unsafe_allow_html=True)
+
+# REVENUE
+with col3:
+
+    st.markdown("<div class='phone'>",unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class='header'>
+    <h3>Revenue & Fertilizer</h3>
+    Track Income & Inputs
+    </div>
+    """,unsafe_allow_html=True)
+
+    st.dataframe(
+        {
+            "Date":["10 Jun","09 Jun","07 Jun"],
+            "Amount":[19680,15360,17940]
+        },
+        use_container_width=True
     )
 
-    st.rerun()
+    st.metric(
+        "Total Revenue",
+        "₹1,24,000"
+    )
 
-st.divider()
+    st.markdown("Block A - NPK")
+    st.progress(80)
 
-# -----------------------------
-# CHARTS
-# -----------------------------
-if not df.empty:
+    st.markdown("Block B - Urea")
+    st.progress(55)
 
-    ch1,ch2 = st.columns(2)
+    st.markdown("Block C - MOP")
+    st.progress(30)
 
-    with ch1:
+    st.markdown("Block C - CIRP")
+    st.progress(65)
 
-        st.subheader("📊 Revenue By Plot")
+    st.markdown("</div>",unsafe_allow_html=True)
 
-        fig1 = px.bar(
-            df,
-            x="Plot",
-            y="Amount",
-            color="Plot",
-            text_auto=True
-        )
+st.markdown("<br>",unsafe_allow_html=True)
 
-        st.plotly_chart(
-            fig1,
-            use_container_width=True
-        )
-
-    with ch2:
-
-        st.subheader("📈 Harvest Trend")
-
-        fig2 = px.line(
-            df,
-            x="Date",
-            y="Weight",
-            markers=True
-        )
-
-        st.plotly_chart(
-            fig2,
-            use_container_width=True
-        )
-
-st.divider()
-
-# -----------------------------
-# RECORDS
-# -----------------------------
-st.subheader("📋 Harvest Records")
-
-st.dataframe(
-    df,
-    use_container_width=True
+st.markdown(
+    "<h3 style='text-align:center;color:white'>Key Features</h3>",
+    unsafe_allow_html=True
 )
 
-# -----------------------------
-# DOWNLOAD
-# -----------------------------
-if os.path.exists(FILE_NAME):
+f1,f2,f3,f4=st.columns(4)
 
-    with open(FILE_NAME,"rb") as f:
+with f1:
+    st.markdown("""
+    <div class='feature' style='background:#2e7d32'>
+    <h4>✂ Fruit Cutting</h4>
+    Track workers and harvest
+    </div>
+    """,unsafe_allow_html=True)
 
-        st.download_button(
-            "📥 Download Excel Report",
-            f,
-            file_name="RK_PalmOilReport.xlsx"
-        )
+with f2:
+    st.markdown("""
+    <div class='feature' style='background:#827717'>
+    <h4>💧 Fertilizer</h4>
+    NPK, Urea, MOP Tracking
+    </div>
+    """,unsafe_allow_html=True)
+
+with f3:
+    st.markdown("""
+    <div class='feature' style='background:#00695c'>
+    <h4>₹ Revenue</h4>
+    Income & Profit Reports
+    </div>
+    """,unsafe_allow_html=True)
+
+with f4:
+    st.markdown("""
+    <div class='feature' style='background:#0d47a1'>
+    <h4>📊 Reports</h4>
+    Monthly Analytics
+    </div>
+    """,unsafe_allow_html=True)
