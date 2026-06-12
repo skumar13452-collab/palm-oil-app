@@ -1,250 +1,265 @@
 import streamlit as st
+import pandas as pd
 
+# -------------------------
+# PAGE CONFIG
+# -------------------------
 st.set_page_config(
     page_title="PalmTrack",
     page_icon="🌴",
     layout="wide"
 )
 
+# -------------------------
+# CUSTOM CSS
+# -------------------------
 st.markdown("""
 <style>
 
 .stApp{
-background: linear-gradient(135deg,#0d3d0d,#145214,#0d3d0d);
+    background: linear-gradient(135deg,#0d3d0d,#145214,#0d3d0d);
 }
 
 .main-title{
-text-align:center;
-color:white;
-font-size:40px;
-font-weight:bold;
+    text-align:center;
+    color:white;
+    font-size:42px;
+    font-weight:bold;
 }
 
 .sub-title{
-text-align:center;
-color:#d0d0d0;
-margin-bottom:30px;
-}
-
-.phone{
-background:white;
-border-radius:25px;
-padding:15px;
-height:700px;
-box-shadow:0px 5px 20px rgba(0,0,0,0.3);
+    text-align:center;
+    color:#dddddd;
+    margin-bottom:25px;
 }
 
 .card{
-background:#f5f5f5;
-padding:15px;
-border-radius:15px;
-margin-bottom:15px;
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+    min-height:650px;
 }
 
-.green{
-background:#e9f7e9;
+.section-title{
+    background:#2e7d32;
+    color:white;
+    padding:12px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+    margin-bottom:15px;
 }
 
-.metric{
-font-size:28px;
-font-weight:bold;
-color:#2e7d32;
+.metric-box{
+    background:#e8f5e9;
+    padding:15px;
+    border-radius:12px;
+    text-align:center;
+    margin-bottom:10px;
 }
 
-.header{
-background:#2e7d32;
-padding:15px;
-border-radius:15px;
-color:white;
-text-align:center;
-margin-bottom:15px;
+.metric-value{
+    font-size:30px;
+    font-weight:bold;
+    color:#2e7d32;
 }
 
 .feature{
-padding:15px;
-border-radius:15px;
-color:white;
-height:130px;
+    padding:20px;
+    border-radius:15px;
+    color:white;
+    text-align:center;
+    font-weight:bold;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
+# -------------------------
+# TITLE
+# -------------------------
 st.markdown(
-    "<div class='main-title'>PalmTrack</div>",
+    "<div class='main-title'>🌴 PalmTrack</div>",
     unsafe_allow_html=True
 )
 
 st.markdown(
-    "<div class='sub-title'>Farm Management · Fruit Cutting · Fertilizer · Revenue</div>",
+    "<div class='sub-title'>Farm Management • Fruit Cutting • Fertilizer • Revenue</div>",
     unsafe_allow_html=True
 )
 
-col1,col2,col3=st.columns(3)
+# -------------------------
+# MAIN 3 MODULES
+# -------------------------
+col1, col2, col3 = st.columns(3)
 
+# ==================================================
 # DASHBOARD
+# ==================================================
 with col1:
 
-    st.markdown("<div class='phone'>",unsafe_allow_html=True)
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
 
     st.markdown("""
-    <div class='header'>
-    <h3>Dashboard</h3>
-    June 2026 - All Blocks
+    <div class='section-title'>
+        Dashboard<br>
+        June 2026 - All Blocks
     </div>
-    """,unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-    a,b=st.columns(2)
+    a, b = st.columns(2)
 
     with a:
         st.markdown("""
-        <div class='card green'>
+        <div class='metric-box'>
         Total Harvest
-        <div class='metric'>4,820</div>
+        <div class='metric-value'>4,820</div>
         kg
         </div>
-        """,unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
 
     with b:
         st.markdown("""
-        <div class='card'>
+        <div class='metric-box'>
         Fertilizer
-        <div class='metric'>380</div>
-        kg used
+        <div class='metric-value'>380</div>
+        kg
         </div>
-        """,unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
 
     st.markdown("""
-    <div class='card green'>
+    <div class='metric-box'>
     Revenue This Month
-    <div class='metric'>₹1,24,000</div>
+    <div class='metric-value'>₹1,24,000</div>
     </div>
-    """,unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-    st.bar_chart({
-        "Block A":[70],
-        "Block B":[40],
-        "Block C":[60]
-    })
+    chart_data = pd.DataFrame(
+        {
+            "Harvest":[70,40,60]
+        },
+        index=["Block A","Block B","Block C"]
+    )
 
-    st.markdown("""
-    <div class='card'>
-    📅 Block C Cutting - 12 Jun
-    </div>
-    """,unsafe_allow_html=True)
+    st.bar_chart(chart_data)
 
-    st.markdown("</div>",unsafe_allow_html=True)
+    st.info("📅 Upcoming Cutting : Block C - 12 Jun")
 
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# ==================================================
 # FRUIT CUTTING
+# ==================================================
 with col2:
 
-    st.markdown("<div class='phone'>",unsafe_allow_html=True)
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
 
     st.markdown("""
-    <div class='header'>
-    <h3>Fruit Cutting</h3>
-    Record & Track Harvest
+    <div class='section-title'>
+        Fruit Cutting<br>
+        Record & Track Harvest
     </div>
-    """,unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-    st.text_input("Date","10/06/2026")
-    st.text_input("Block","A")
-    st.text_input("Workers","6")
-    st.text_input("Qty (kg)","820")
+    st.text_input("Date", "10/06/2026")
+    st.text_input("Block", "A")
+    st.text_input("Workers", "6")
+    st.text_input("Quantity (kg)", "820")
 
-    st.button("➕ Add")
+    st.button("➕ Add Record")
 
     st.markdown("### Recent Records")
 
-    st.dataframe(
-        {
-            "Date":["10 Jun","09 Jun","08 Jun"],
-            "Block":["A","B","C"],
-            "Qty":[820,640,510]
-        },
-        use_container_width=True
-    )
+    df = pd.DataFrame({
+        "Date":["10 Jun","09 Jun","08 Jun"],
+        "Block":["A","B","C"],
+        "Qty":[820,640,510]
+    })
 
-    st.success("This Week Total : 3340 kg")
+    st.dataframe(df, use_container_width=True)
 
-    st.markdown("</div>",unsafe_allow_html=True)
+    st.success("Weekly Harvest : 3340 kg")
 
-# REVENUE
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# ==================================================
+# REVENUE & FERTILIZER
+# ==================================================
 with col3:
 
-    st.markdown("<div class='phone'>",unsafe_allow_html=True)
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
 
     st.markdown("""
-    <div class='header'>
-    <h3>Revenue & Fertilizer</h3>
-    Track Income & Inputs
+    <div class='section-title'>
+        Revenue & Fertilizer<br>
+        Track Income & Inputs
     </div>
-    """,unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-    st.dataframe(
-        {
-            "Date":["10 Jun","09 Jun","07 Jun"],
-            "Amount":[19680,15360,17940]
-        },
-        use_container_width=True
-    )
+    revenue_df = pd.DataFrame({
+        "Date":["10 Jun","09 Jun","07 Jun"],
+        "Amount":[19680,15360,17940]
+    })
 
-    st.metric(
-        "Total Revenue",
-        "₹1,24,000"
-    )
+    st.dataframe(revenue_df, use_container_width=True)
 
-    st.markdown("Block A - NPK")
+    st.metric("Total Revenue", "₹1,24,000")
+
+    st.write("Block A - NPK")
     st.progress(80)
 
-    st.markdown("Block B - Urea")
+    st.write("Block B - Urea")
     st.progress(55)
 
-    st.markdown("Block C - MOP")
+    st.write("Block C - MOP")
     st.progress(30)
 
-    st.markdown("Block C - CIRP")
+    st.write("Block D - CIRP")
     st.progress(65)
 
-    st.markdown("</div>",unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
-st.markdown("<br>",unsafe_allow_html=True)
+# -------------------------
+# FEATURES
+# -------------------------
+st.markdown("<br>", unsafe_allow_html=True)
 
 st.markdown(
-    "<h3 style='text-align:center;color:white'>Key Features</h3>",
+    "<h3 style='text-align:center;color:white;'>Key Features</h3>",
     unsafe_allow_html=True
 )
 
-f1,f2,f3,f4=st.columns(4)
+f1, f2, f3, f4 = st.columns(4)
 
 with f1:
     st.markdown("""
     <div class='feature' style='background:#2e7d32'>
-    <h4>✂ Fruit Cutting</h4>
-    Track workers and harvest
+    ✂ Fruit Cutting<br><br>
+    Track harvest and workers
     </div>
-    """,unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 with f2:
     st.markdown("""
     <div class='feature' style='background:#827717'>
-    <h4>💧 Fertilizer</h4>
-    NPK, Urea, MOP Tracking
+    💧 Fertilizer<br><br>
+    NPK • Urea • MOP Tracking
     </div>
-    """,unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 with f3:
     st.markdown("""
     <div class='feature' style='background:#00695c'>
-    <h4>₹ Revenue</h4>
+    ₹ Revenue<br><br>
     Income & Profit Reports
     </div>
-    """,unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 with f4:
     st.markdown("""
     <div class='feature' style='background:#0d47a1'>
-    <h4>📊 Reports</h4>
+    📊 Reports<br><br>
     Monthly Analytics
     </div>
-    """,unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
