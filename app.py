@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+import textwrap
 
 # Set page configuration
 st.set_page_config(
@@ -73,7 +74,7 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 
 /* Sidebar Custom Buttons */
-div.stButton > button {
+[data-testid="stSidebar"] div.stButton > button {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
@@ -88,11 +89,11 @@ div.stButton > button {
     font-weight: 500 !important;
     transition: all 0.2s ease !important;
 }
-div.stButton > button:hover {
+[data-testid="stSidebar"] div.stButton > button:hover {
     background-color: #1E4623 !important;
     color: #FFFFFF !important;
 }
-div.stButton > button:active {
+[data-testid="stSidebar"] div.stButton > button:active {
     background-color: #419445 !important;
     color: #FFFFFF !important;
 }
@@ -365,7 +366,7 @@ svg.brand-icon {
 }
 </style>
 """
-st.markdown(custom_css, unsafe_allow_html=True)
+st.html(custom_css)
 
 # -----------------------------------------------------------------------------
 # Initialize Mock Data in Session State for Real interactivity
@@ -404,7 +405,7 @@ if "selected_page" not in st.session_state:
 # -----------------------------------------------------------------------------
 with st.sidebar:
     # Sidebar Brand Area
-    st.markdown('''
+    st.html(textwrap.dedent('''
         <div class="sidebar-logo-container">
             <div class="logo-icon-box">
                 <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brand-icon">
@@ -420,7 +421,7 @@ with st.sidebar:
                 <div class="logo-text-subtitle">Estate Manager</div>
             </div>
         </div>
-    ''', unsafe_allow_html=True)
+    '''))
     
     # Overview section
     st.markdown('<div class="sidebar-section-header">Overview</div>', unsafe_allow_html=True)
@@ -523,7 +524,7 @@ banner_svg = """
 </svg>
 """
 
-st.markdown(f'''
+st.html(textwrap.dedent(f'''
 <div class="main-banner">
     <div class="banner-left">
         <div class="banner-logo-wrapper">
@@ -539,14 +540,12 @@ st.markdown(f'''
         <div class="banner-date">16 Jun 2026</div>
     </div>
 </div>
-''', unsafe_allow_html=True)
+'''))
 
 
 # -----------------------------------------------------------------------------
 # DYNAMIC MATH COMPUTATIONS
 # -----------------------------------------------------------------------------
-# Default base is 183.7 tonnes so that when initial 4 cuttings (totaling 64.8 tonnes)
-# are added, the sum equals exactly 248.5 tonnes.
 base_harvest = 183.7
 active_cuttings_tonnes = sum(c['tonnes'] for c in st.session_state.cuttings)
 total_harvest = base_harvest + active_cuttings_tonnes
@@ -567,7 +566,7 @@ if st.session_state.selected_page == "Dashboard":
     kpi_cols = st.columns(4)
     
     with kpi_cols[0]:
-        st.markdown(f'''
+        st.html(textwrap.dedent(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">✂️</span> TOTAL HARVEST
@@ -578,10 +577,10 @@ if st.session_state.selected_page == "Dashboard":
                 </div>
                 <div class="kpi-trend-green">↑ 12% vs last month</div>
             </div>
-        ''', unsafe_allow_html=True)
+        '''))
 
     with kpi_cols[1]:
-        st.markdown(f'''
+        st.html(textwrap.dedent(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">🪙</span> REVENUE
@@ -592,10 +591,10 @@ if st.session_state.selected_page == "Dashboard":
                 </div>
                 <div class="kpi-trend-green">↑ 8% vs last month</div>
             </div>
-        ''', unsafe_allow_html=True)
+        '''))
 
     with kpi_cols[2]:
-        st.markdown(f'''
+        st.html(textwrap.dedent(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">👥</span> ACTIVE WORKERS
@@ -606,10 +605,10 @@ if st.session_state.selected_page == "Dashboard":
                 </div>
                 <div class="kpi-trend-gray">{st.session_state.workers_on_leave} on leave today</div>
             </div>
-        ''', unsafe_allow_html=True)
+        '''))
 
     with kpi_cols[3]:
-        st.markdown(f'''
+        st.html(textwrap.dedent(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">🧪</span> FERTILISER USED
@@ -620,7 +619,7 @@ if st.session_state.selected_page == "Dashboard":
                 </div>
                 <div class="kpi-trend-red">↑ 5% over budget</div>
             </div>
-        ''', unsafe_allow_html=True)
+        '''))
 
     st.markdown('<div style="margin-top: 24px;"></div>', unsafe_allow_html=True)
 
@@ -642,13 +641,13 @@ if st.session_state.selected_page == "Dashboard":
             </tr>
             '''
             
-        cuttings_card = f'''
+        cuttings_card = textwrap.dedent(f'''
         <div class="panel-card">
             <div class="panel-header-container">
                 <div class="panel-title">
                     <span style="color: #419445; font-size: 20px;">✂️</span> Recent Cuttings
                 </div>
-                <div class="arrow-btn" onclick="parent.window.location.reload()">➔</div>
+                <div class="arrow-btn">➔</div>
             </div>
             <table class="cuttings-table">
                 <thead>
@@ -664,8 +663,8 @@ if st.session_state.selected_page == "Dashboard":
                 </tbody>
             </table>
         </div>
-        '''
-        st.markdown(cuttings_card, unsafe_allow_html=True)
+        ''')
+        st.html(cuttings_card)
 
     # Bottom Right: Transport Today List
     with bottom_cols[1]:
@@ -688,7 +687,7 @@ if st.session_state.selected_page == "Dashboard":
             </div>
             '''
 
-        transport_card = f'''
+        transport_card = textwrap.dedent(f'''
         <div class="panel-card">
             <div class="panel-header-container" style="margin-bottom: 16px;">
                 <div class="panel-title">
@@ -699,8 +698,8 @@ if st.session_state.selected_page == "Dashboard":
                 {transport_items_html}
             </div>
         </div>
-        '''
-        st.markdown(transport_card, unsafe_allow_html=True)
+        ''')
+        st.html(transport_card)
 
 
 # PAGE: HARVEST (Log harvests dynamically)
@@ -725,7 +724,7 @@ elif st.session_state.selected_page == "Harvest":
     with col1:
         st.markdown('<h3 style="color: #2D5B2F; font-size: 18px; margin-bottom: 10px;">Log New Cutting</h3>', unsafe_allow_html=True)
         with st.form("new_cutting_form", clear_on_submit=True):
-            work_name = st.text_input("Work Name", placeholder="e.g. Morning Cut D", help="Name of the cutting schedule.")
+            work_name = st.text_input("Work Name", placeholder="e.g. Morning Cut D")
             block = st.selectbox("Assign Block", ["Block A", "Block B", "Block C", "Block D"])
             tonnes = st.number_input("Tonnage Yield (tonnes)", min_value=0.1, max_value=100.0, value=15.0, step=0.1)
             status = st.selectbox("Current Status", ["Weighed", "In Transit", "Delivered"])
@@ -775,15 +774,15 @@ elif st.session_state.selected_page == "Fertiliser":
     
     fert_cols = st.columns(2)
     with fert_cols[0]:
-        st.markdown('''
+        st.html(textwrap.dedent(f'''
             <div class="panel-card" style="padding: 24px;">
                 <h4 style="margin: 0; color: #1A231C; font-size: 16px;">Current Fertiliser Cycle usage</h4>
                 <div style="font-size: 36px; font-weight: 700; margin: 10px 0; color: #2D5B2F;">
-        '''+f"{st.session_state.fertiliser_used:.1f} tonnes"'''
+                    {st.session_state.fertiliser_used:.1f} tonnes
                 </div>
                 <p style="color: #5C6B5E; font-size: 14px; margin-bottom: 15px;">Allocated Budget: <b>2.0 tonnes</b> for Cycle A</p>
             </div>
-        ''', unsafe_allow_html=True)
+        '''))
         
         st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
         st.write("#### Add Fertiliser Application Logs")
@@ -794,11 +793,11 @@ elif st.session_state.selected_page == "Fertiliser":
             st.rerun()
 
     with fert_cols[1]:
-        st.markdown('''
+        st.html(textwrap.dedent('''
             <div class="panel-card">
                 <h4 style="margin: 0; color: #1A231C; font-size: 16px; margin-bottom: 15px;">Cycle budget distribution</h4>
             </div>
-        ''', unsafe_allow_html=True)
+        '''))
         # Display progress bar for visual context
         pct = min(1.0, st.session_state.fertiliser_used / 2.0)
         st.progress(pct, text=f"Budget Usage: {pct*100:.0f}%")
@@ -843,7 +842,7 @@ elif st.session_state.selected_page == "Workers":
                 st.rerun()
 
     with w_cols[1]:
-        st.markdown('''
+        st.html(textwrap.dedent('''
             <div class="panel-card">
                 <h4 style="margin: 0 0 15px 0; color: #1A231C; font-size: 16px;">Active Block Assignment Roster</h4>
                 <table class="cuttings-table">
@@ -862,7 +861,7 @@ elif st.session_state.selected_page == "Workers":
                     </tbody>
                 </table>
             </div>
-        ''', unsafe_allow_html=True)
+        '''))
 
 
 # PAGE: TRANSPORT (Log logistics/truck trips)
@@ -942,10 +941,10 @@ elif st.session_state.selected_page == "Pricing":
     # Financial breakdown cards
     p_cols = st.columns(2)
     with p_cols[0]:
-        st.markdown(f'''
+        st.html(textwrap.dedent(f'''
             <div class="panel-card">
                 <h4 style="margin:0; color:#5C6B5E; font-size: 13px; text-transform: uppercase;">Estimated Earnings summary</h4>
                 <div style="font-size: 28px; font-weight: 700; color: #1A231C; margin: 10px 0;">₹ {total_revenue_rs:,.2f}</div>
                 <p style="font-size:14px; color:#5C6B5E; margin:0;">Calculated from {total_harvest:.1f} total harvest tonnes at ₹ {st.session_state.price_per_tonne:,} rate.</p>
             </div>
-        ''', unsafe_allow_html=True)
+        '''))
