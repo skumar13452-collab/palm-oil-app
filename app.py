@@ -94,3 +94,40 @@ with right:
     st.warning(
         "TN02CD5678\n\nTrailer - 14.7T\n\nEn Route"
     )
+
+with st.sidebar:
+
+    st.markdown("## 🌴 PalmTrack")
+    st.caption("Estate Manager")
+
+    st.divider()
+
+    st.page_link(
+        "pages/1_Dashboard.py",
+        label="Dashboard",
+        icon="📊"
+    )
+
+    st.page_link(
+        "pages/2_Harvest.py",
+        label="Harvest",
+        icon="✂"
+    )
+
+    st.page_link(
+        "pages/3_Workers.py",
+        label="Workers",
+        icon="👨‍🌾"
+    )
+
+    st.page_link(
+        "pages/4_Fertilizer.py",
+        label="Fertilizer",
+        icon="🧪"
+    )
+
+    st.page_link(
+        "pages/5_Transport.py",
+        label="Transport",
+        icon="🚚"
+    )
