@@ -74,7 +74,7 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 
 /* Sidebar Custom Buttons */
-div.stButton > button {
+[data-testid="stSidebar"] div.stButton > button {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
@@ -89,11 +89,11 @@ div.stButton > button {
     font-weight: 500 !important;
     transition: all 0.2s ease !important;
 }
-div.stButton > button:hover {
+[data-testid="stSidebar"] div.stButton > button:hover {
     background-color: #1E4623 !important;
     color: #FFFFFF !important;
 }
-div.stButton > button:active {
+[data-testid="stSidebar"] div.stButton > button:active {
     background-color: #419445 !important;
     color: #FFFFFF !important;
 }
