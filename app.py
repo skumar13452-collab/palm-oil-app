@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import textwrap
+import base64
+import os
 
 # Set page configuration
 st.set_page_config(
@@ -17,36 +19,88 @@ st.set_page_config(
 def clean_html(html_str):
     return " ".join([line.strip() for line in html_str.split("\n") if line.strip()])
 
+# Function to safely load a local image and convert it to base64
+def get_base64_image(image_path):
+    if os.path.exists(image_path):
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    return ""
+
+# Try loading the palm tree plantation image from multiple standard folders
+img_locations = [
+    "oip-palm.jpeg",
+    "oip-palm.jpeg",
+    "custom_agent_interactions/uU7s72pMeLkRgFRLbacC9S/input/pasted-image-oip-palm-1781598943010.jpeg"
+]
+
+img_base64 = ""
+for path in img_locations:
+    encoded = get_base64_image(path)
+    if encoded:
+        img_base64 = encoded
+        break
+
+# Dynamic CSS for background image injection if the image is successfully loaded
+background_css = ""
+if img_base64:
+    background_css = f"""
+    [data-testid="stAppViewContainer"] {{
+        background-image: url("data:image/jpeg;base64,{img_base64}") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
+    }}
+    /* Semi-transparent protective overlay to maintain 100% text readability */
+    [data-testid="stAppViewContainer"]::before {{
+        content: "" !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background-color: rgba(250, 250, 248, 0.88) !important; /* Elegant 88% opaque protective layer */
+        z-index: -1 !important;
+    }}
+    /* Frosted glass glassmorphism for a gorgeous modern card layout */
+    .kpi-card, .panel-card {{
+        background-color: rgba(255, 255, 255, 0.85) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        border: 1px solid rgba(234, 233, 228, 0.5) !important;
+    }}
+    """
+
 # Custom CSS for high-fidelity matching
-custom_css = """
+custom_css = f"""
 <style>
 /* Global styles and main background */
-html, body, [data-testid="stAppViewContainer"] {
+html, body, [data-testid="stAppViewContainer"] {{
     background-color: #FAFAF8 !important;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: #1A231C;
-}
+}}
 
 /* Remove default padding and margins of Streamlit layout */
-[data-testid="stHeader"] {
+[data-testid="stHeader"] {{
     background-color: transparent !important;
-}
+}}
 
-[data-testid="stSidebar"] {
+[data-testid="stSidebar"] {{
     background-color: #143519 !important;
     border-right: 1px solid #1A401F;
-}
+}}
 
 /* Sidebar Logo Area */
-.sidebar-logo-container {
+.sidebar-logo-container {{
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 10px 0px 24px 0px;
     border-bottom: 1px solid #1F4A25;
     margin-bottom: 15px;
-}
-.logo-icon-box {
+}}
+.logo-icon-box {{
     background-color: #2D5B2F;
     width: 42px;
     height: 42px;
@@ -55,20 +109,20 @@ html, body, [data-testid="stAppViewContainer"] {
     align-items: center;
     justify-content: center;
     color: white;
-}
-.logo-text-title {
+}}
+.logo-text-title {{
     font-size: 18px;
     font-weight: 700;
     color: #FFFFFF !important;
     line-height: 1.2;
-}
-.logo-text-subtitle {
+}}
+.logo-text-subtitle {{
     font-size: 13px;
     color: #8EAE91 !important;
-}
+}}
 
 /* Sidebar Section Headers */
-.sidebar-section-header {
+.sidebar-section-header {{
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1px;
@@ -77,10 +131,10 @@ html, body, [data-testid="stAppViewContainer"] {
     margin-top: 22px;
     margin-bottom: 10px;
     padding-left: 5px;
-}
+}}
 
 /* Sidebar Custom Buttons - SCOPED strictly inside the Sidebar container */
-[data-testid="stSidebar"] div.stButton > button {
+[data-testid="stSidebar"] div.stButton > button {{
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
@@ -94,25 +148,25 @@ html, body, [data-testid="stAppViewContainer"] {
     font-size: 15px !important;
     font-weight: 500 !important;
     transition: all 0.2s ease !important;
-}
-[data-testid="stSidebar"] div.stButton > button:hover {
+}}
+[data-testid="stSidebar"] div.stButton > button:hover {{
     background-color: #1E4623 !important;
     color: #FFFFFF !important;
-}
-[data-testid="stSidebar"] div.stButton > button:active {
+}}
+[data-testid="stSidebar"] div.stButton > button:active {{
     background-color: #419445 !important;
     color: #FFFFFF !important;
-}
+}}
 
 /* Active Nav Button Styling */
-.active-nav-btn div.stButton > button {
+.active-nav-btn div.stButton > button {{
     background-color: #419445 !important;
     color: #FFFFFF !important;
     font-weight: 600 !important;
-}
+}}
 
 /* Floating Sidebar Expand Chevron Styling (just in case collapsed) */
-[data-testid="stSidebarCollapsedControl"] {
+[data-testid="stSidebarCollapsedControl"] {{
     background-color: #143519 !important;
     border-radius: 8px !important;
     padding: 6px !important;
@@ -120,17 +174,17 @@ html, body, [data-testid="stAppViewContainer"] {
     top: 15px !important;
     left: 15px !important;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2) !important;
-}
-[data-testid="stSidebarCollapsedControl"] button {
+}}
+[data-testid="stSidebarCollapsedControl"] button {{
     color: #FFFFFF !important;
-}
-[data-testid="stSidebarCollapsedControl"] svg {
+}}
+[data-testid="stSidebarCollapsedControl"] svg {{
     fill: #FFFFFF !important;
     color: #FFFFFF !important;
-}
+}}
 
 /* Main Banner container */
-.main-banner {
+.main-banner {{
     background-color: #2D5B2F;
     border-radius: 14px;
     padding: 24px;
@@ -139,51 +193,51 @@ html, body, [data-testid="stAppViewContainer"] {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 24px;
-}
-.banner-left {
+}}
+.banner-left {{
     display: flex;
     align-items: center;
     gap: 18px;
-}
-.banner-logo-wrapper {
+}}
+.banner-logo-wrapper {{
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-.banner-title {
+}}
+.banner-title {{
     font-size: 24px;
     font-weight: 700;
     margin: 0;
     line-height: 1.2;
     color: white;
-}
-.banner-subtitle {
+}}
+.banner-subtitle {{
     font-size: 14px;
     color: #B2D8B5;
     margin: 4px 0 0 0;
-}
-.banner-right {
+}}
+.banner-right {{
     text-align: right;
-}
-.banner-today {
+}}
+.banner-today {{
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.8px;
     color: #B2D8B5;
     margin: 0;
-}
-.banner-date {
+}}
+.banner-date {{
     font-size: 24px;
     font-weight: 700;
     margin: 4px 0 0 0;
     color: white;
-}
+}}
 
 /* Metric Cards style */
-.kpi-card {
+.kpi-card {{
     background-color: #F6F5F2;
     border-radius: 12px;
     padding: 20px;
@@ -192,8 +246,8 @@ html, body, [data-testid="stAppViewContainer"] {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-.kpi-header {
+}}
+.kpi-header {{
     display: flex;
     align-items: center;
     gap: 8px;
@@ -203,62 +257,62 @@ html, body, [data-testid="stAppViewContainer"] {
     text-transform: uppercase;
     letter-spacing: 0.8px;
     margin-bottom: 12px;
-}
-.kpi-header-icon {
+}}
+.kpi-header-icon {{
     font-size: 14px;
-}
-.kpi-value {
+}}
+.kpi-value {{
     font-size: 32px;
     font-weight: 700;
     color: #1A231C;
     line-height: 1.1;
     margin-bottom: 4px;
-}
-.kpi-subtitle {
+}}
+.kpi-subtitle {{
     font-size: 13px;
     color: #5C6B5E;
     margin-bottom: 12px;
     line-height: 1.3;
-}
-.kpi-trend-green {
+}}
+.kpi-trend-green {{
     font-size: 13px;
     font-weight: 600;
     color: #2E7D32;
-}
-.kpi-trend-gray {
+}}
+.kpi-trend-gray {{
     font-size: 13px;
     font-weight: 500;
     color: #7A8B7D;
-}
-.kpi-trend-red {
+}}
+.kpi-trend-red {{
     font-size: 13px;
     font-weight: 600;
     color: #B22B27;
-}
+}}
 
 /* Panel Containers */
-.panel-card {
+.panel-card {{
     background-color: #FFFFFF;
     border-radius: 14px;
     border: 1px solid #EAE9E4;
     padding: 24px;
     height: 100%;
-}
-.panel-header-container {
+}}
+.panel-header-container {{
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
-}
-.panel-title {
+}}
+.panel-title {{
     font-size: 18px;
     font-weight: 700;
     color: #1A231C;
     display: flex;
     align-items: center;
     gap: 8px;
-}
-.arrow-btn {
+}}
+.arrow-btn {{
     border: 1px solid #EAE9E4;
     border-radius: 8px;
     width: 32px;
@@ -270,14 +324,14 @@ html, body, [data-testid="stAppViewContainer"] {
     background-color: white;
     color: #1A231C;
     font-weight: bold;
-}
+}}
 
 /* Cuttings Table Style */
-.cuttings-table {
+.cuttings-table {{
     width: 100%;
     border-collapse: collapse;
-}
-.cuttings-table th {
+}}
+.cuttings-table th {{
     font-size: 11px;
     font-weight: 700;
     color: #5C6B5E;
@@ -286,57 +340,57 @@ html, body, [data-testid="stAppViewContainer"] {
     padding-bottom: 12px;
     text-align: left;
     border-bottom: 1px solid #EAE9E4;
-}
-.cuttings-table td {
+}}
+.cuttings-table td {{
     padding: 14px 0;
     font-size: 14px;
     color: #1A231C;
     border-bottom: 1px solid #F0EFEA;
-}
-.cuttings-table tr:last-child td {
+}}
+.cuttings-table tr:last-child td {{
     border-bottom: none;
-}
-.work-name {
+}}
+.work-name {{
     font-weight: 600;
-}
+}}
 
 /* Badges styling */
-.badge {
+.badge {{
     display: inline-block;
     padding: 4px 10px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
     text-align: center;
-}
-.badge-delivered {
+}}
+.badge-delivered {{
     background-color: #E2F3E2;
     color: #2E7D32;
-}
-.badge-transit {
+}}
+.badge-transit {{
     background-color: #FFF3E0;
     color: #EF6C00;
-}
-.badge-weighed {
+}}
+.badge-weighed {{
     background-color: #E3F2FD;
     color: #1565C0;
-}
-.badge-completed {
+}}
+.badge-completed {{
     background-color: #E2F3E2;
     color: #2E7D32;
-}
-.badge-enroute {
+}}
+.badge-enroute {{
     background-color: #FFF3E0;
     color: #EF6C00;
-}
+}}
 
 /* Transport elements */
-.transport-list {
+.transport-list {{
     display: flex;
     flex-direction: column;
     gap: 12px;
-}
-.transport-item {
+}}
+.transport-item {{
     background-color: #F8F7F3;
     border-radius: 12px;
     padding: 14px 16px;
@@ -344,13 +398,13 @@ html, body, [data-testid="stAppViewContainer"] {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-.transport-left {
+}}
+.transport-left {{
     display: flex;
     align-items: center;
     gap: 12px;
-}
-.transport-icon-box {
+}}
+.transport-icon-box {{
     background-color: #E2F3E2;
     width: 44px;
     height: 44px;
@@ -359,29 +413,31 @@ html, body, [data-testid="stAppViewContainer"] {
     align-items: center;
     justify-content: center;
     font-size: 20px;
-}
-.transport-details {
+}}
+.transport-details {{
     display: flex;
     flex-direction: column;
-}
-.transport-id {
+}}
+.transport-id {{
     font-weight: 700;
     font-size: 14px;
     color: #1A231C;
-}
-.transport-desc {
+}}
+.transport-desc {{
     font-size: 12px;
     color: #5C6B5E;
     margin-top: 2px;
-}
+}}
 
 /* Remove the top padding from the main block container */
-.block-container {
+.block-container {{
     padding-top: 2rem !important;
     padding-bottom: 2rem !important;
     padding-left: 3rem !important;
     padding-right: 3rem !important;
-}
+}}
+
+{background_css}
 </style>
 """
 st.markdown(clean_html(custom_css), unsafe_allow_html=True)
