@@ -11,4 +11,13 @@ st.set_page_config(
 load_css()
 login()
 
-st.switch_page("pages/1_Dashboard.py")
+st.markdown("""
+<div class='estate-card'>
+<h2>🌴 Riverside Palm Estate</h2>
+250 hectares • Block A-D
+<br><br>
+<b>16 Jun 2026</b>
+</div>
+""", unsafe_allow_html=True)
+
+st.write("Dashboard content here...")
