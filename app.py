@@ -108,17 +108,37 @@ with st.sidebar:
         icon="📊"
     )
 
-    st.page_link(
-        "pages/2_Harvest.py",
-        label="Harvest",
-        icon="✂"
-    )
+   st.sidebar.markdown("## Navigation")
 
-    st.page_link(
-        "pages/3_Workers.py",
-        label="Workers",
-        icon="👨‍🌾"
-    )
+page = st.sidebar.radio(
+    "Select Page",
+    [
+        "Dashboard",
+        "Harvest",
+        "Workers",
+        "Fertilizer",
+        "Transport",
+        "Reports"
+    ]
+)
+
+if page == "Dashboard":
+    st.title("Dashboard")
+
+elif page == "Harvest":
+    st.title("Harvest")
+
+elif page == "Workers":
+    st.title("Workers")
+
+elif page == "Fertilizer":
+    st.title("Fertilizer")
+
+elif page == "Transport":
+    st.title("Transport")
+
+elif page == "Reports":
+    st.title("Reports")
 
     st.page_link(
         "pages/4_Fertilizer.py",
