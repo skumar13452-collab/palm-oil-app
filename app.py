@@ -11,6 +11,12 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Helper function to completely minify HTML/CSS strings on-the-fly
+# This strips ALL leading and trailing spaces from every line, eliminating any possibility 
+# of the Markdown engine parsing indented lines as preformatted code blocks.
+def clean_html(html_str):
+    return " ".join([line.strip() for line in html_str.split("\n") if line.strip()])
+
 # Custom CSS for high-fidelity matching
 custom_css = """
 <style>
@@ -378,7 +384,7 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 </style>
 """
-st.markdown(textwrap.dedent(custom_css), unsafe_allow_html=True)
+st.markdown(clean_html(custom_css), unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
 # Initialize Mock Data in Session State for Real interactivity
@@ -417,7 +423,7 @@ if "selected_page" not in st.session_state:
 # -----------------------------------------------------------------------------
 with st.sidebar:
     # Sidebar Brand Area
-    st.markdown(textwrap.dedent('''
+    st.markdown(clean_html('''
         <div class="sidebar-logo-container">
             <div class="logo-icon-box">
                 <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px;">
@@ -536,7 +542,7 @@ banner_svg = """
 </svg>
 """
 
-st.markdown(textwrap.dedent(f'''
+st.markdown(clean_html(f'''
 <div class="main-banner">
     <div class="banner-left">
         <div class="banner-logo-wrapper">
@@ -578,7 +584,7 @@ if st.session_state.selected_page == "Dashboard":
     kpi_cols = st.columns(4)
     
     with kpi_cols[0]:
-        st.markdown(textwrap.dedent(f'''
+        st.markdown(clean_html(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">✂️</span> TOTAL HARVEST
@@ -592,7 +598,7 @@ if st.session_state.selected_page == "Dashboard":
         '''), unsafe_allow_html=True)
 
     with kpi_cols[1]:
-        st.markdown(textwrap.dedent(f'''
+        st.markdown(clean_html(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">🪙</span> REVENUE
@@ -606,7 +612,7 @@ if st.session_state.selected_page == "Dashboard":
         '''), unsafe_allow_html=True)
 
     with kpi_cols[2]:
-        st.markdown(textwrap.dedent(f'''
+        st.markdown(clean_html(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">👥</span> ACTIVE WORKERS
@@ -620,7 +626,7 @@ if st.session_state.selected_page == "Dashboard":
         '''), unsafe_allow_html=True)
 
     with kpi_cols[3]:
-        st.markdown(textwrap.dedent(f'''
+        st.markdown(clean_html(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">🧪</span> FERTILISER USED
@@ -653,7 +659,7 @@ if st.session_state.selected_page == "Dashboard":
             </tr>
             '''
             
-        cuttings_card = textwrap.dedent(f'''
+        cuttings_card = f'''
         <div class="panel-card">
             <div class="panel-header-container">
                 <div class="panel-title">
@@ -675,8 +681,8 @@ if st.session_state.selected_page == "Dashboard":
                 </tbody>
             </table>
         </div>
-        ''')
-        st.markdown(cuttings_card, unsafe_allow_html=True)
+        '''
+        st.markdown(clean_html(cuttings_card), unsafe_allow_html=True)
 
     # Bottom Right: Transport Today List
     with bottom_cols[1]:
@@ -699,7 +705,7 @@ if st.session_state.selected_page == "Dashboard":
             </div>
             '''
 
-        transport_card = textwrap.dedent(f'''
+        transport_card = f'''
         <div class="panel-card">
             <div class="panel-header-container" style="margin-bottom: 16px;">
                 <div class="panel-title">
@@ -710,8 +716,8 @@ if st.session_state.selected_page == "Dashboard":
                 {transport_items_html}
             </div>
         </div>
-        ''')
-        st.markdown(transport_card, unsafe_allow_html=True)
+        '''
+        st.markdown(clean_html(transport_card), unsafe_allow_html=True)
 
 
 # PAGE: HARVEST (Log harvests dynamically)
