@@ -96,7 +96,6 @@ with right:
     )
 
 with st.sidebar:
-
     st.markdown("## 🌴 PalmTrack")
     st.caption("Estate Manager")
 
@@ -109,7 +108,6 @@ with st.sidebar:
     )
 
    st.sidebar.markdown("## Navigation")
-
 page = st.sidebar.radio(
     "Select Page",
     [
