@@ -73,7 +73,7 @@ html, body, [data-testid="stAppViewContainer"] {
     padding-left: 5px;
 }
 
-/* Sidebar Custom Buttons */
+/* Sidebar Custom Buttons - SCOPED strictly inside the Sidebar container */
 [data-testid="stSidebar"] div.stButton > button {
     display: flex !important;
     align-items: center !important;
@@ -103,6 +103,24 @@ html, body, [data-testid="stAppViewContainer"] {
     background-color: #419445 !important;
     color: #FFFFFF !important;
     font-weight: 600 !important;
+}
+
+/* Floating Sidebar Expand Chevron Styling (just in case collapsed) */
+[data-testid="stSidebarCollapsedControl"] {
+    background-color: #143519 !important;
+    border-radius: 8px !important;
+    padding: 6px !important;
+    z-index: 999999 !important;
+    top: 15px !important;
+    left: 15px !important;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2) !important;
+}
+[data-testid="stSidebarCollapsedControl"] button {
+    color: #FFFFFF !important;
+}
+[data-testid="stSidebarCollapsedControl"] svg {
+    fill: #FFFFFF !important;
+    color: #FFFFFF !important;
 }
 
 /* Main Banner container */
@@ -351,12 +369,6 @@ html, body, [data-testid="stAppViewContainer"] {
     margin-top: 2px;
 }
 
-/* Sidebar branding icon customization */
-svg.brand-icon {
-    width: 24px;
-    height: 24px;
-}
-
 /* Remove the top padding from the main block container */
 .block-container {
     padding-top: 2rem !important;
@@ -366,7 +378,7 @@ svg.brand-icon {
 }
 </style>
 """
-st.html(custom_css)
+st.markdown(textwrap.dedent(custom_css), unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
 # Initialize Mock Data in Session State for Real interactivity
@@ -405,10 +417,10 @@ if "selected_page" not in st.session_state:
 # -----------------------------------------------------------------------------
 with st.sidebar:
     # Sidebar Brand Area
-    st.html(textwrap.dedent('''
+    st.markdown(textwrap.dedent('''
         <div class="sidebar-logo-container">
             <div class="logo-icon-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brand-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px;">
                     <path d="M12 22V12" />
                     <path d="M12 12C12 12 7 10 5 13" />
                     <path d="M12 12C12 12 17 10 19 13" />
@@ -421,7 +433,7 @@ with st.sidebar:
                 <div class="logo-text-subtitle">Estate Manager</div>
             </div>
         </div>
-    '''))
+    '''), unsafe_allow_html=True)
     
     # Overview section
     st.markdown('<div class="sidebar-section-header">Overview</div>', unsafe_allow_html=True)
@@ -524,7 +536,7 @@ banner_svg = """
 </svg>
 """
 
-st.html(textwrap.dedent(f'''
+st.markdown(textwrap.dedent(f'''
 <div class="main-banner">
     <div class="banner-left">
         <div class="banner-logo-wrapper">
@@ -540,7 +552,7 @@ st.html(textwrap.dedent(f'''
         <div class="banner-date">16 Jun 2026</div>
     </div>
 </div>
-'''))
+'''), unsafe_allow_html=True)
 
 
 # -----------------------------------------------------------------------------
@@ -566,7 +578,7 @@ if st.session_state.selected_page == "Dashboard":
     kpi_cols = st.columns(4)
     
     with kpi_cols[0]:
-        st.html(textwrap.dedent(f'''
+        st.markdown(textwrap.dedent(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">✂️</span> TOTAL HARVEST
@@ -577,10 +589,10 @@ if st.session_state.selected_page == "Dashboard":
                 </div>
                 <div class="kpi-trend-green">↑ 12% vs last month</div>
             </div>
-        '''))
+        '''), unsafe_allow_html=True)
 
     with kpi_cols[1]:
-        st.html(textwrap.dedent(f'''
+        st.markdown(textwrap.dedent(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">🪙</span> REVENUE
@@ -591,10 +603,10 @@ if st.session_state.selected_page == "Dashboard":
                 </div>
                 <div class="kpi-trend-green">↑ 8% vs last month</div>
             </div>
-        '''))
+        '''), unsafe_allow_html=True)
 
     with kpi_cols[2]:
-        st.html(textwrap.dedent(f'''
+        st.markdown(textwrap.dedent(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">👥</span> ACTIVE WORKERS
@@ -605,10 +617,10 @@ if st.session_state.selected_page == "Dashboard":
                 </div>
                 <div class="kpi-trend-gray">{st.session_state.workers_on_leave} on leave today</div>
             </div>
-        '''))
+        '''), unsafe_allow_html=True)
 
     with kpi_cols[3]:
-        st.html(textwrap.dedent(f'''
+        st.markdown(textwrap.dedent(f'''
             <div class="kpi-card">
                 <div class="kpi-header">
                     <span class="kpi-header-icon">🧪</span> FERTILISER USED
@@ -619,7 +631,7 @@ if st.session_state.selected_page == "Dashboard":
                 </div>
                 <div class="kpi-trend-red">↑ 5% over budget</div>
             </div>
-        '''))
+        '''), unsafe_allow_html=True)
 
     st.markdown('<div style="margin-top: 24px;"></div>', unsafe_allow_html=True)
 
@@ -664,7 +676,7 @@ if st.session_state.selected_page == "Dashboard":
             </table>
         </div>
         ''')
-        st.html(cuttings_card)
+        st.markdown(cuttings_card, unsafe_allow_html=True)
 
     # Bottom Right: Transport Today List
     with bottom_cols[1]:
@@ -699,7 +711,7 @@ if st.session_state.selected_page == "Dashboard":
             </div>
         </div>
         ''')
-        st.html(transport_card)
+        st.markdown(transport_card, unsafe_allow_html=True)
 
 
 # PAGE: HARVEST (Log harvests dynamically)
@@ -774,7 +786,7 @@ elif st.session_state.selected_page == "Fertiliser":
     
     fert_cols = st.columns(2)
     with fert_cols[0]:
-        st.html(textwrap.dedent(f'''
+        st.markdown(textwrap.dedent(f'''
             <div class="panel-card" style="padding: 24px;">
                 <h4 style="margin: 0; color: #1A231C; font-size: 16px;">Current Fertiliser Cycle usage</h4>
                 <div style="font-size: 36px; font-weight: 700; margin: 10px 0; color: #2D5B2F;">
@@ -782,7 +794,7 @@ elif st.session_state.selected_page == "Fertiliser":
                 </div>
                 <p style="color: #5C6B5E; font-size: 14px; margin-bottom: 15px;">Allocated Budget: <b>2.0 tonnes</b> for Cycle A</p>
             </div>
-        '''))
+        '''), unsafe_allow_html=True)
         
         st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
         st.write("#### Add Fertiliser Application Logs")
@@ -793,11 +805,11 @@ elif st.session_state.selected_page == "Fertiliser":
             st.rerun()
 
     with fert_cols[1]:
-        st.html(textwrap.dedent('''
+        st.markdown(textwrap.dedent('''
             <div class="panel-card">
                 <h4 style="margin: 0; color: #1A231C; font-size: 16px; margin-bottom: 15px;">Cycle budget distribution</h4>
             </div>
-        '''))
+        '''), unsafe_allow_html=True)
         # Display progress bar for visual context
         pct = min(1.0, st.session_state.fertiliser_used / 2.0)
         st.progress(pct, text=f"Budget Usage: {pct*100:.0f}%")
@@ -842,7 +854,7 @@ elif st.session_state.selected_page == "Workers":
                 st.rerun()
 
     with w_cols[1]:
-        st.html(textwrap.dedent('''
+        st.markdown(textwrap.dedent('''
             <div class="panel-card">
                 <h4 style="margin: 0 0 15px 0; color: #1A231C; font-size: 16px;">Active Block Assignment Roster</h4>
                 <table class="cuttings-table">
@@ -861,7 +873,7 @@ elif st.session_state.selected_page == "Workers":
                     </tbody>
                 </table>
             </div>
-        '''))
+        '''), unsafe_allow_html=True)
 
 
 # PAGE: TRANSPORT (Log logistics/truck trips)
@@ -941,10 +953,10 @@ elif st.session_state.selected_page == "Pricing":
     # Financial breakdown cards
     p_cols = st.columns(2)
     with p_cols[0]:
-        st.html(textwrap.dedent(f'''
+        st.markdown(textwrap.dedent(f'''
             <div class="panel-card">
                 <h4 style="margin:0; color:#5C6B5E; font-size: 13px; text-transform: uppercase;">Estimated Earnings summary</h4>
                 <div style="font-size: 28px; font-weight: 700; color: #1A231C; margin: 10px 0;">₹ {total_revenue_rs:,.2f}</div>
                 <p style="font-size:14px; color:#5C6B5E; margin:0;">Calculated from {total_harvest:.1f} total harvest tonnes at ₹ {st.session_state.price_per_tonne:,} rate.</p>
             </div>
-        '''))
+        '''), unsafe_allow_html=True)
