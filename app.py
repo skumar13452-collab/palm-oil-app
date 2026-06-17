@@ -439,27 +439,19 @@ if "price_per_tonne" not in st.session_state:
     st.session_state.price_per_tonne = 1658
 
 if "cuttings" not in st.session_state:
-    st.session_state.cuttings = [
-        {"name": "Morning Cut A", "block": "Block A", "tonnes": 18.2, "status": "Delivered"},
-        {"name": "Evening Cut B", "block": "Block B", "tonnes": 14.7, "status": "In Transit"},
-        {"name": "Morning Cut C", "block": "Block C", "tonnes": 22.1, "status": "Delivered"},
-        {"name": "Night Cut A", "block": "Block A", "tonnes": 9.8, "status": "Weighed"}
-    ]
+    st.session_state.cuttings = []
 
 if "transport" not in st.session_state:
-    st.session_state.transport = [
-        {"id": "TN 01 AB 1234", "type": "Lorry", "tonnes": 18.2, "charge": 3200, "status": "Completed"},
-        {"id": "TN 02 CD 5678", "type": "Trailer", "tonnes": 14.7, "charge": 4500, "status": "En Route"}
-    ]
+    st.session_state.transport = []
 
 if "fertiliser_used" not in st.session_state:
-    st.session_state.fertiliser_used = 1.8
+    st.session_state.fertiliser_used = 0.0
 
 if "workers_on_leave" not in st.session_state:
-    st.session_state.workers_on_leave = 6
+    st.session_state.workers_on_leave = 0
 
 if "active_workers" not in st.session_state:
-    st.session_state.active_workers = 34
+    st.session_state.active_workers = 0
 
 if "selected_page" not in st.session_state:
     st.session_state.selected_page = "Dashboard"
@@ -556,15 +548,7 @@ with st.sidebar:
     if is_pricing_active:
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # Reset Data Area (Helpful for demo)
-    st.markdown('<div style="margin-top: 50px;"></div>', unsafe_allow_html=True)
-    if st.button("🔄 Reset Demo Data", use_container_width=True):
-        for key in ["cuttings", "transport", "price_per_tonne", "fertiliser_used", "workers_on_leave", "active_workers", "selected_page"]:
-            if key in st.session_state:
-                del st.session_state[key]
-        st.success("Data reset to default!")
-        st.rerun()
-
+    
 # -----------------------------------------------------------------------------
 # MAIN HEADER BANNER (Shared across all pages)
 # -----------------------------------------------------------------------------
