@@ -438,7 +438,7 @@ st.markdown(clean_html(custom_css), unsafe_allow_html=True)
 # Initialize Mock Data in Session State for Real interactivity
 # -----------------------------------------------------------------------------
 if "price_per_tonne" not in st.session_state:
-    st.session_state.price_per_tonne = 0
+    st.session_state.price_per_tonne = 1658
 
 if "cuttings" not in st.session_state:
     st.session_state.cuttings = []
