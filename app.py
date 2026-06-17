@@ -436,7 +436,7 @@ st.markdown(clean_html(custom_css), unsafe_allow_html=True)
 # Initialize Mock Data in Session State for Real interactivity
 # -----------------------------------------------------------------------------
 if "price_per_tonne" not in st.session_state:
-    st.session_state.price_per_tonne = 1658
+    st.session_state.price_per_tonne = 0
 
 if "cuttings" not in st.session_state:
     st.session_state.cuttings = []
@@ -579,8 +579,8 @@ st.markdown(clean_html(f'''
             {banner_svg}
         </div>
         <div>
-            <div class="banner-title">Riverside Palm Estate</div>
-            <div class="banner-subtitle">250 hectares · Block A-D · Season: Jan-Dec 2025</div>
+            <div class="banner-title">PalmTrack Estate Manager</div>
+            <div class="banner-subtitle">Configure your estate details</div>
         </div>
     </div>
     <div class="banner-right">
@@ -594,9 +594,9 @@ st.markdown(clean_html(f'''
 # -----------------------------------------------------------------------------
 # DYNAMIC MATH COMPUTATIONS
 # -----------------------------------------------------------------------------
-base_harvest = 183.7
+base_harvest = 0
 active_cuttings_tonnes = sum(c['tonnes'] for c in st.session_state.cuttings)
-total_harvest = base_harvest + active_cuttings_tonnes
+total_harvest = active_cuttings_tonnes
 
 # Revenue calculation using the price_per_tonne configurator
 total_revenue_rs = total_harvest * st.session_state.price_per_tonne
@@ -623,7 +623,7 @@ if st.session_state.selected_page == "Dashboard":
                     <div class="kpi-value">{total_harvest:.1f}</div>
                     <div class="kpi-subtitle">tonnes this month</div>
                 </div>
-                <div class="kpi-trend-green">↑ 12% vs last month</div>
+                <div class="kpi-trend-green">No data available</div>
             </div>
         '''), unsafe_allow_html=True)
 
@@ -637,7 +637,7 @@ if st.session_state.selected_page == "Dashboard":
                     <div class="kpi-value">₹{total_revenue_lakhs:.2f}L</div>
                     <div class="kpi-subtitle">at ₹{st.session_state.price_per_tonne:,}/tonne</div>
                 </div>
-                <div class="kpi-trend-green">↑ 8% vs last month</div>
+                <div class="kpi-trend-green">No data available</div>
             </div>
         '''), unsafe_allow_html=True)
 
@@ -665,7 +665,7 @@ if st.session_state.selected_page == "Dashboard":
                     <div class="kpi-value">{st.session_state.fertiliser_used:.1f}</div>
                     <div class="kpi-subtitle">tonnes this cycle</div>
                 </div>
-                <div class="kpi-trend-red">↑ 5% over budget</div>
+                <div class="kpi-trend-red">No data available</div>
             </div>
         '''), unsafe_allow_html=True)
 
@@ -902,10 +902,7 @@ elif st.session_state.selected_page == "Workers":
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td><b>Block A</b></td><td>Rajesh Kumar</td><td>10 Workers</td></tr>
-                        <tr><td><b>Block B</b></td><td>Anil Sharma</td><td>8 Workers</td></tr>
-                        <tr><td><b>Block C</b></td><td>Siddharth Nair</td><td>9 Workers</td></tr>
-                        <tr><td><b>Block D</b></td><td>Murugan Pillai</td><td>7 Workers</td></tr>
+                        <tr><td colspan="3" style="text-align:center;">No worker records available</td></tr>
                     </tbody>
                 </table>
             </div>
