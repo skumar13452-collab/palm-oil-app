@@ -49,15 +49,15 @@ if img_base64:
         left: 0 !important;
         width: 100vw !important;
         height: 100vh !important;
-        background-color: rgba(250, 250, 248, 0.88) !important; /* Elegant 88% opaque protective layer */
+        background-color: rgba(253, 246, 233, 0.80) !important; /* Warm ivory protective layer that lets the palm-fruit tones glow through */
         z-index: -1 !important;
     }}
-    /* Frosted glass glassmorphism for a gorgeous modern card layout */
+    /* Frosted glass glassmorphism, retinted warm-ivory/gold to harmonise with the background photo */
     .kpi-card, .panel-card {{
-        background-color: rgba(255, 255, 255, 0.85) !important;
+        background-color: rgba(255, 250, 240, 0.90) !important;
         backdrop-filter: blur(8px) !important;
         -webkit-backdrop-filter: blur(8px) !important;
-        border: 1px solid rgba(234, 233, 228, 0.5) !important;
+        border: 1px solid rgba(201, 138, 61, 0.30) !important;
     }}
     """
 
@@ -77,8 +77,8 @@ html, body, [data-testid="stAppViewContainer"] {{
 }}
 
 [data-testid="stSidebar"] {{
-    background-color: #143519 !important;
-    border-right: 1px solid #1A401F;
+    background: linear-gradient(165deg, #1B3D21 0%, #102217 100%) !important;
+    border-right: 1px solid #C9963F;
 }}
 
 /* Sidebar Logo Area */
@@ -87,11 +87,11 @@ html, body, [data-testid="stAppViewContainer"] {{
     align-items: center;
     gap: 12px;
     padding: 10px 0px 24px 0px;
-    border-bottom: 1px solid #1F4A25;
+    border-bottom: 1px solid rgba(201, 150, 63, 0.35);
     margin-bottom: 15px;
 }}
 .logo-icon-box {{
-    background-color: #2D5B2F;
+    background-color: #3B6B40;
     width: 42px;
     height: 42px;
     border-radius: 10px;
@@ -99,6 +99,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     align-items: center;
     justify-content: center;
     color: white;
+    box-shadow: 0 0 0 2px rgba(217, 164, 64, 0.45);
 }}
 .logo-text-title {{
     font-size: 18px;
@@ -108,7 +109,7 @@ html, body, [data-testid="stAppViewContainer"] {{
 }}
 .logo-text-subtitle {{
     font-size: 13px;
-    color: #8EAE91 !important;
+    color: #D9B97A !important;
 }}
 
 /* Sidebar Section Headers */
@@ -116,7 +117,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1px;
-    color: #6C8E70 !important;
+    color: #C79A56 !important;
     text-transform: uppercase;
     margin-top: 22px;
     margin-bottom: 10px;
@@ -131,7 +132,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     width: 100% !important;
     background-color: transparent !important;
     border: none !important;
-    color: #B4CBB6 !important;
+    color: #BFD0B8 !important;
     padding: 10px 14px !important;
     text-align: left !important;
     border-radius: 8px !important;
@@ -140,24 +141,24 @@ html, body, [data-testid="stAppViewContainer"] {{
     transition: all 0.2s ease !important;
 }}
 [data-testid="stSidebar"] div.stButton > button:hover {{
-    background-color: #1E4623 !important;
+    background-color: #25492B !important;
     color: #FFFFFF !important;
 }}
 [data-testid="stSidebar"] div.stButton > button:active {{
-    background-color: #419445 !important;
-    color: #FFFFFF !important;
+    background-color: #D9A440 !important;
+    color: #1B2E12 !important;
 }}
 
 /* Active Nav Button Styling */
 .active-nav-btn div.stButton > button {{
-    background-color: #419445 !important;
-    color: #FFFFFF !important;
-    font-weight: 600 !important;
+    background-color: #D9A440 !important;
+    color: #1B2E12 !important;
+    font-weight: 700 !important;
 }}
 
 /* Floating Sidebar Expand Chevron Styling (just in case collapsed) */
 [data-testid="stSidebarCollapsedControl"] {{
-    background-color: #143519 !important;
+    background-color: #1B3D21 !important;
     border-radius: 8px !important;
     padding: 6px !important;
     z-index: 999999 !important;
@@ -175,7 +176,7 @@ html, body, [data-testid="stAppViewContainer"] {{
 
 /* Main Banner container */
 .main-banner {{
-    background-color: #2D5B2F;
+    background: linear-gradient(120deg, #1F4424 0%, #3B6B3F 60%, #6B7F3A 100%);
     border-radius: 14px;
     padding: 24px;
     color: white;
@@ -183,6 +184,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     align-items: center;
     justify-content: space-between;
     margin-bottom: 24px;
+    box-shadow: inset 0 -3px 0 0 rgba(217, 164, 64, 0.55);
 }}
 .banner-left {{
     display: flex;
@@ -190,7 +192,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     gap: 18px;
 }}
 .banner-logo-wrapper {{
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(217, 164, 64, 0.18);
     border-radius: 12px;
     padding: 6px;
     display: flex;
@@ -206,7 +208,7 @@ html, body, [data-testid="stAppViewContainer"] {{
 }}
 .banner-subtitle {{
     font-size: 14px;
-    color: #B2D8B5;
+    color: #E3D5AE;
     margin: 4px 0 0 0;
 }}
 .banner-right {{
@@ -216,7 +218,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    color: #B2D8B5;
+    color: #E8C170;
     margin: 0;
 }}
 .banner-date {{
@@ -228,10 +230,10 @@ html, body, [data-testid="stAppViewContainer"] {{
 
 /* Metric Cards style */
 .kpi-card {{
-    background-color: #F6F5F2;
+    background-color: #FAF3E7;
     border-radius: 12px;
     padding: 20px;
-    border: 1px solid #EAE9E4;
+    border: 1px solid #EFE0C2;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -282,9 +284,9 @@ html, body, [data-testid="stAppViewContainer"] {{
 
 /* Panel Containers */
 .panel-card {{
-    background-color: #FFFFFF;
+    background-color: #FFFBF4;
     border-radius: 14px;
-    border: 1px solid #EAE9E4;
+    border: 1px solid #EFE0C2;
     padding: 24px;
     height: 100%;
 }}
@@ -329,13 +331,13 @@ html, body, [data-testid="stAppViewContainer"] {{
     letter-spacing: 0.8px;
     padding-bottom: 12px;
     text-align: left;
-    border-bottom: 1px solid #EAE9E4;
+    border-bottom: 1px solid #EFE0C2;
 }}
 .cuttings-table td {{
     padding: 14px 0;
     font-size: 14px;
     color: #1A231C;
-    border-bottom: 1px solid #F0EFEA;
+    border-bottom: 1px solid #F6EEDD;
 }}
 .cuttings-table tr:last-child td {{
     border-bottom: none;
@@ -381,10 +383,10 @@ html, body, [data-testid="stAppViewContainer"] {{
     gap: 12px;
 }}
 .transport-item {{
-    background-color: #F8F7F3;
+    background-color: #FCF5E9;
     border-radius: 12px;
     padding: 14px 16px;
-    border: 1px solid #EAE9E4;
+    border: 1px solid #EFE0C2;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -693,7 +695,7 @@ if st.session_state.selected_page == "Dashboard":
         <div class="panel-card">
             <div class="panel-header-container">
                 <div class="panel-title">
-                    <span style="color: #419445; font-size: 20px;">✂️</span> Recent Cuttings
+                    <span style="color: #C9852E; font-size: 20px;">✂️</span> Recent Cuttings
                 </div>
                 <div class="arrow-btn">➔</div>
             </div>
@@ -739,7 +741,7 @@ if st.session_state.selected_page == "Dashboard":
         <div class="panel-card">
             <div class="panel-header-container" style="margin-bottom: 16px;">
                 <div class="panel-title">
-                    <span style="color: #419445; font-size: 20px;">🚚</span> Transport Today
+                    <span style="color: #C9852E; font-size: 20px;">🚚</span> Transport Today
                 </div>
             </div>
             <div class="transport-list">
