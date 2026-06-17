@@ -7,7 +7,7 @@ import os
 
 # Set page configuration
 st.set_page_config(
-    page_title="PalmTrack Estate Manager",
+    page_title="RK Forms",
     page_icon="🌴",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -972,7 +972,7 @@ elif st.session_state.selected_page == "Pricing":
     new_price = st.number_input(
         "Current Market Rate per Tonne (INR)", 
         min_value=500, 
-        max_value=10000, 
+        max_value=100000, 
         value=st.session_state.price_per_tonne, 
         step=10,
         help="This is the value used to multiply your total tonnes to calculate revenue."
