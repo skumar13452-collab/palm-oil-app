@@ -581,7 +581,7 @@ st.markdown(clean_html(f'''
             {banner_svg}
         </div>
         <div>
-            <div class="banner-title">PalmTrack Estate Manager</div>
+            <div class="banner-title">RK Forms</div>
             <div class="banner-subtitle">Configure your estate details</div>
         </div>
     </div>
