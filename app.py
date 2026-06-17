@@ -26,19 +26,9 @@ def get_base64_image(image_path):
             return base64.b64encode(img_file.read()).decode()
     return ""
 
-# Try loading the palm tree plantation image from multiple standard folders
-img_locations = [
-    "oip-palm.jpeg",
-    "oip-palm.jpeg",
-    "custom_agent_interactions/uU7s72pMeLkRgFRLbacC9S/input/pasted-image-oip-palm-1781598943010.jpeg"
-]
-
-img_base64 = ""
-for path in img_locations:
-    encoded = get_base64_image(path)
-    if encoded:
-        img_base64 = encoded
-        break
+# Load background image from repository root
+IMAGE_FILE = "oip-palm.jpg"
+img_base64 = get_base64_image(IMAGE_FILE)
 
 # Dynamic CSS for background image injection if the image is successfully loaded
 background_css = ""
@@ -76,7 +66,7 @@ custom_css = f"""
 <style>
 /* Global styles and main background */
 html, body, [data-testid="stAppViewContainer"] {{
-    background-color: #FAFAF8 !important;
+    background-color: transparent !important;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: #1A231C;
 }}
