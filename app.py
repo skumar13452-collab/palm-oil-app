@@ -26,40 +26,35 @@ def get_base64_image(image_path):
             return base64.b64encode(img_file.read()).decode()
     return ""
 
-# Load background image from repository root
+# Load background image from repository root (kept for optional future use, unused by the teal theme)
 IMAGE_FILE = "oip-palm.jpg"
 img_base64 = get_base64_image(IMAGE_FILE)
 
-# Dynamic CSS for background image injection if the image is successfully loaded
-background_css = ""
-if img_base64:
-    background_css = f"""
-    [data-testid="stAppViewContainer"] {{
-        background-image: url("data:image/jpeg;base64,{img_base64}") !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-attachment: fixed !important;
-    }}
-    /* Semi-transparent protective overlay to maintain 100% text readability */
-    [data-testid="stAppViewContainer"]::before {{
-        content: "" !important;
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        background-color: rgba(253, 246, 233, 0.80) !important; /* Warm ivory protective layer that lets the palm-fruit tones glow through */
-        z-index: -1 !important;
-    }}
-    /* Frosted glass glassmorphism, retinted warm-ivory/gold to harmonise with the background photo */
-    .kpi-card, .panel-card {{
-        background-color: rgba(255, 250, 240, 0.90) !important;
-        backdrop-filter: blur(8px) !important;
-        -webkit-backdrop-filter: blur(8px) !important;
-        border: 1px solid rgba(201, 138, 61, 0.30) !important;
-    }}
-    """
+# Teal "Poly Room Control" inspired background: soft blurred teal gradient with a faint diagonal texture
+background_css = """
+[data-testid="stAppViewContainer"] {
+    background: radial-gradient(circle at 30% 20%, #2E7C7E 0%, #1C5E62 28%, #123F44 55%, #0A2629 80%, #07191B 100%) !important;
+    background-attachment: fixed !important;
+}
+/* Faint repeating chevron texture, echoing the Poly background watermark */
+[data-testid="stAppViewContainer"]::before {
+    content: "" !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 2px, transparent 2px, transparent 38px) !important;
+    z-index: -1 !important;
+}
+/* Frosted glass glassmorphism, retinted teal to match the Poly control-panel look */
+.kpi-card, .panel-card {
+    background-color: rgba(255, 255, 255, 0.07) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+}
+"""
 
 # Custom CSS for high-fidelity matching
 custom_css = f"""
@@ -68,7 +63,7 @@ custom_css = f"""
 html, body, [data-testid="stAppViewContainer"] {{
     background-color: transparent !important;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: #1A231C;
+    color: #EAF7F7;
 }}
 
 /* Remove default padding and margins of Streamlit layout */
@@ -77,8 +72,8 @@ html, body, [data-testid="stAppViewContainer"] {{
 }}
 
 [data-testid="stSidebar"] {{
-    background: linear-gradient(165deg, #1B3D21 0%, #102217 100%) !important;
-    border-right: 1px solid #C9963F;
+    background: linear-gradient(165deg, #0E2E32 0%, #061416 100%) !important;
+    border-right: 1px solid #2DD4BF;
 }}
 
 /* Sidebar Logo Area */
@@ -87,11 +82,11 @@ html, body, [data-testid="stAppViewContainer"] {{
     align-items: center;
     gap: 12px;
     padding: 10px 0px 24px 0px;
-    border-bottom: 1px solid rgba(201, 150, 63, 0.35);
+    border-bottom: 1px solid rgba(45, 212, 191, 0.35);
     margin-bottom: 15px;
 }}
 .logo-icon-box {{
-    background-color: #3B6B40;
+    background-color: #15585C;
     width: 42px;
     height: 42px;
     border-radius: 10px;
@@ -99,7 +94,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     align-items: center;
     justify-content: center;
     color: white;
-    box-shadow: 0 0 0 2px rgba(217, 164, 64, 0.45);
+    box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.45);
 }}
 .logo-text-title {{
     font-size: 18px;
@@ -109,7 +104,7 @@ html, body, [data-testid="stAppViewContainer"] {{
 }}
 .logo-text-subtitle {{
     font-size: 13px;
-    color: #D9B97A !important;
+    color: #7FE3DE !important;
 }}
 
 /* Sidebar Section Headers */
@@ -117,7 +112,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1px;
-    color: #C79A56 !important;
+    color: #5EEAD4 !important;
     text-transform: uppercase;
     margin-top: 22px;
     margin-bottom: 10px;
@@ -132,7 +127,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     width: 100% !important;
     background-color: transparent !important;
     border: none !important;
-    color: #BFD0B8 !important;
+    color: #A9D6D8 !important;
     padding: 10px 14px !important;
     text-align: left !important;
     border-radius: 8px !important;
@@ -141,24 +136,24 @@ html, body, [data-testid="stAppViewContainer"] {{
     transition: all 0.2s ease !important;
 }}
 [data-testid="stSidebar"] div.stButton > button:hover {{
-    background-color: #25492B !important;
+    background-color: #123C40 !important;
     color: #FFFFFF !important;
 }}
 [data-testid="stSidebar"] div.stButton > button:active {{
-    background-color: #D9A440 !important;
-    color: #1B2E12 !important;
+    background-color: #1E88E5 !important;
+    color: #FFFFFF !important;
 }}
 
 /* Active Nav Button Styling */
 .active-nav-btn div.stButton > button {{
-    background-color: #D9A440 !important;
-    color: #1B2E12 !important;
+    background-color: #1E88E5 !important;
+    color: #FFFFFF !important;
     font-weight: 700 !important;
 }}
 
 /* Floating Sidebar Expand Chevron Styling (just in case collapsed) */
 [data-testid="stSidebarCollapsedControl"] {{
-    background-color: #1B3D21 !important;
+    background-color: #0E2E32 !important;
     border-radius: 8px !important;
     padding: 6px !important;
     z-index: 999999 !important;
@@ -176,7 +171,7 @@ html, body, [data-testid="stAppViewContainer"] {{
 
 /* Main Banner container */
 .main-banner {{
-    background: linear-gradient(120deg, #1F4424 0%, #3B6B3F 60%, #6B7F3A 100%);
+    background: linear-gradient(120deg, #0F3B42 0%, #1C5F66 55%, #2E9098 100%);
     border-radius: 14px;
     padding: 24px;
     color: white;
@@ -184,7 +179,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     align-items: center;
     justify-content: space-between;
     margin-bottom: 24px;
-    box-shadow: inset 0 -3px 0 0 rgba(217, 164, 64, 0.55);
+    box-shadow: inset 0 -3px 0 0 rgba(45, 212, 191, 0.55);
 }}
 .banner-left {{
     display: flex;
@@ -192,7 +187,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     gap: 18px;
 }}
 .banner-logo-wrapper {{
-    background-color: rgba(217, 164, 64, 0.18);
+    background-color: rgba(45, 212, 191, 0.18);
     border-radius: 12px;
     padding: 6px;
     display: flex;
@@ -208,7 +203,7 @@ html, body, [data-testid="stAppViewContainer"] {{
 }}
 .banner-subtitle {{
     font-size: 14px;
-    color: #E3D5AE;
+    color: #BFEAEA;
     margin: 4px 0 0 0;
 }}
 .banner-right {{
@@ -218,7 +213,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    color: #E8C170;
+    color: #7FE3DE;
     margin: 0;
 }}
 .banner-date {{
@@ -230,10 +225,10 @@ html, body, [data-testid="stAppViewContainer"] {{
 
 /* Metric Cards style */
 .kpi-card {{
-    background-color: #FAF3E7;
+    background-color: rgba(255, 255, 255, 0.06);
     border-radius: 12px;
     padding: 20px;
-    border: 1px solid #EFE0C2;
+    border: 1px solid rgba(255, 255, 255, 0.14);
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -245,7 +240,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     gap: 8px;
     font-size: 11px;
     font-weight: 700;
-    color: #5C6B5E;
+    color: #9FC9CC;
     text-transform: uppercase;
     letter-spacing: 0.8px;
     margin-bottom: 12px;
@@ -256,37 +251,37 @@ html, body, [data-testid="stAppViewContainer"] {{
 .kpi-value {{
     font-size: 32px;
     font-weight: 700;
-    color: #1A231C;
+    color: #F2FBFB;
     line-height: 1.1;
     margin-bottom: 4px;
 }}
 .kpi-subtitle {{
     font-size: 13px;
-    color: #5C6B5E;
+    color: #9FC9CC;
     margin-bottom: 12px;
     line-height: 1.3;
 }}
 .kpi-trend-green {{
     font-size: 13px;
     font-weight: 600;
-    color: #2E7D32;
+    color: #4ADE80;
 }}
 .kpi-trend-gray {{
     font-size: 13px;
     font-weight: 500;
-    color: #7A8B7D;
+    color: #9FC9CC;
 }}
 .kpi-trend-red {{
     font-size: 13px;
     font-weight: 600;
-    color: #B22B27;
+    color: #F87171;
 }}
 
 /* Panel Containers */
 .panel-card {{
-    background-color: #FFFBF4;
+    background-color: rgba(255, 255, 255, 0.06);
     border-radius: 14px;
-    border: 1px solid #EFE0C2;
+    border: 1px solid rgba(255, 255, 255, 0.14);
     padding: 24px;
     height: 100%;
 }}
@@ -299,13 +294,13 @@ html, body, [data-testid="stAppViewContainer"] {{
 .panel-title {{
     font-size: 18px;
     font-weight: 700;
-    color: #1A231C;
+    color: #F2FBFB;
     display: flex;
     align-items: center;
     gap: 8px;
 }}
 .arrow-btn {{
-    border: 1px solid #EAE9E4;
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 8px;
     width: 32px;
     height: 32px;
@@ -313,8 +308,8 @@ html, body, [data-testid="stAppViewContainer"] {{
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    background-color: white;
-    color: #1A231C;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #F2FBFB;
     font-weight: bold;
 }}
 
@@ -326,18 +321,18 @@ html, body, [data-testid="stAppViewContainer"] {{
 .cuttings-table th {{
     font-size: 11px;
     font-weight: 700;
-    color: #5C6B5E;
+    color: #9FC9CC;
     text-transform: uppercase;
     letter-spacing: 0.8px;
     padding-bottom: 12px;
     text-align: left;
-    border-bottom: 1px solid #EFE0C2;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
 }}
 .cuttings-table td {{
     padding: 14px 0;
     font-size: 14px;
-    color: #1A231C;
-    border-bottom: 1px solid #F6EEDD;
+    color: #F2FBFB;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }}
 .cuttings-table tr:last-child td {{
     border-bottom: none;
@@ -356,24 +351,24 @@ html, body, [data-testid="stAppViewContainer"] {{
     text-align: center;
 }}
 .badge-delivered {{
-    background-color: #E2F3E2;
-    color: #2E7D32;
+    background-color: rgba(45, 212, 191, 0.18);
+    color: #5EEAD4;
 }}
 .badge-transit {{
-    background-color: #FFF3E0;
-    color: #EF6C00;
+    background-color: rgba(251, 191, 36, 0.18);
+    color: #FBBF24;
 }}
 .badge-weighed {{
-    background-color: #E3F2FD;
-    color: #1565C0;
+    background-color: rgba(96, 165, 250, 0.18);
+    color: #93C5FD;
 }}
 .badge-completed {{
-    background-color: #E2F3E2;
-    color: #2E7D32;
+    background-color: rgba(45, 212, 191, 0.18);
+    color: #5EEAD4;
 }}
 .badge-enroute {{
-    background-color: #FFF3E0;
-    color: #EF6C00;
+    background-color: rgba(251, 191, 36, 0.18);
+    color: #FBBF24;
 }}
 
 /* Transport elements */
@@ -383,10 +378,10 @@ html, body, [data-testid="stAppViewContainer"] {{
     gap: 12px;
 }}
 .transport-item {{
-    background-color: #FCF5E9;
+    background-color: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     padding: 14px 16px;
-    border: 1px solid #EFE0C2;
+    border: 1px solid rgba(255, 255, 255, 0.14);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -397,7 +392,7 @@ html, body, [data-testid="stAppViewContainer"] {{
     gap: 12px;
 }}
 .transport-icon-box {{
-    background-color: #E2F3E2;
+    background-color: rgba(45, 212, 191, 0.16);
     width: 44px;
     height: 44px;
     border-radius: 10px;
@@ -413,12 +408,23 @@ html, body, [data-testid="stAppViewContainer"] {{
 .transport-id {{
     font-weight: 700;
     font-size: 14px;
-    color: #1A231C;
+    color: #F2FBFB;
 }}
 .transport-desc {{
     font-size: 12px;
-    color: #5C6B5E;
+    color: #9FC9CC;
     margin-top: 2px;
+}}
+
+/* Native Streamlit widget overrides for dark-theme readability */
+[data-testid="stMetricValue"] {{
+    color: #F2FBFB !important;
+}}
+[data-testid="stMetricLabel"] {{
+    color: #9FC9CC !important;
+}}
+hr {{
+    border-color: rgba(255, 255, 255, 0.15) !important;
 }}
 
 /* Remove the top padding from the main block container */
@@ -695,7 +701,7 @@ if st.session_state.selected_page == "Dashboard":
         <div class="panel-card">
             <div class="panel-header-container">
                 <div class="panel-title">
-                    <span style="color: #C9852E; font-size: 20px;">✂️</span> Recent Cuttings
+                    <span style="color: #5EEAD4; font-size: 20px;">✂️</span> Recent Cuttings
                 </div>
                 <div class="arrow-btn">➔</div>
             </div>
@@ -741,7 +747,7 @@ if st.session_state.selected_page == "Dashboard":
         <div class="panel-card">
             <div class="panel-header-container" style="margin-bottom: 16px;">
                 <div class="panel-title">
-                    <span style="color: #C9852E; font-size: 20px;">🚚</span> Transport Today
+                    <span style="color: #5EEAD4; font-size: 20px;">🚚</span> Transport Today
                 </div>
             </div>
             <div class="transport-list">
@@ -754,7 +760,7 @@ if st.session_state.selected_page == "Dashboard":
 
 # PAGE: HARVEST (Log harvests dynamically)
 elif st.session_state.selected_page == "Harvest":
-    st.markdown('<h2 style="color: #2D5B2F; font-weight: 700;">✂️ Harvest Operations</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #5EEAD4; font-weight: 700;">✂️ Harvest Operations</h2>', unsafe_allow_html=True)
     st.write("Manage daily palm oil cuttings and log harvest tonnes block-by-block.")
     
     # Grid of harvest status summary
@@ -772,7 +778,7 @@ elif st.session_state.selected_page == "Harvest":
     
     # Form to Log New Harvest Cutting
     with col1:
-        st.markdown('<h3 style="color: #2D5B2F; font-size: 18px; margin-bottom: 10px;">Log New Cutting</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="color: #5EEAD4; font-size: 18px; margin-bottom: 10px;">Log New Cutting</h3>', unsafe_allow_html=True)
         with st.form("new_cutting_form", clear_on_submit=True):
             work_name = st.text_input("Work Name", placeholder="e.g. Morning Cut D")
             block = st.selectbox("Assign Block", ["Block A", "Block B", "Block C", "Block D"])
@@ -796,7 +802,7 @@ elif st.session_state.selected_page == "Harvest":
 
     # List and Delete cutting logs
     with col2:
-        st.markdown('<h3 style="color: #2D5B2F; font-size: 18px; margin-bottom: 10px;">Active Harvest Records</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="color: #5EEAD4; font-size: 18px; margin-bottom: 10px;">Active Harvest Records</h3>', unsafe_allow_html=True)
         
         # Interactive table container
         for idx, cutting in enumerate(st.session_state.cuttings):
@@ -814,23 +820,23 @@ elif st.session_state.selected_page == "Harvest":
                     st.session_state.cuttings.pop(idx)
                     st.success(f"Removed log: {cutting['name']}")
                     st.rerun()
-            st.markdown('<hr style="margin: 6px 0; border: none; border-bottom: 1px solid #ECEBE6;" />', unsafe_allow_html=True)
+            st.markdown('<hr style="margin: 6px 0; border: none; border-bottom: 1px solid rgba(255,255,255,0.12);" />', unsafe_allow_html=True)
 
 
 # PAGE: FERTILISER
 elif st.session_state.selected_page == "Fertiliser":
-    st.markdown('<h2 style="color: #2D5B2F; font-weight: 700;">🧪 Fertiliser Management</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #5EEAD4; font-weight: 700;">🧪 Fertiliser Management</h2>', unsafe_allow_html=True)
     st.write("Track fertiliser input applications and monitor cycles against budget limits.")
     
     fert_cols = st.columns(2)
     with fert_cols[0]:
         st.markdown(textwrap.dedent(f'''
             <div class="panel-card" style="padding: 24px;">
-                <h4 style="margin: 0; color: #1A231C; font-size: 16px;">Current Fertiliser Cycle usage</h4>
-                <div style="font-size: 36px; font-weight: 700; margin: 10px 0; color: #2D5B2F;">
+                <h4 style="margin: 0; color: #F2FBFB; font-size: 16px;">Current Fertiliser Cycle usage</h4>
+                <div style="font-size: 36px; font-weight: 700; margin: 10px 0; color: #5EEAD4;">
                     {st.session_state.fertiliser_used:.1f} tonnes
                 </div>
-                <p style="color: #5C6B5E; font-size: 14px; margin-bottom: 15px;">Allocated Budget: <b>2.0 tonnes</b> for Cycle A</p>
+                <p style="color: #9FC9CC; font-size: 14px; margin-bottom: 15px;">Allocated Budget: <b>2.0 tonnes</b> for Cycle A</p>
             </div>
         '''), unsafe_allow_html=True)
         
@@ -845,7 +851,7 @@ elif st.session_state.selected_page == "Fertiliser":
     with fert_cols[1]:
         st.markdown(textwrap.dedent('''
             <div class="panel-card">
-                <h4 style="margin: 0; color: #1A231C; font-size: 16px; margin-bottom: 15px;">Cycle budget distribution</h4>
+                <h4 style="margin: 0; color: #F2FBFB; font-size: 16px; margin-bottom: 15px;">Cycle budget distribution</h4>
             </div>
         '''), unsafe_allow_html=True)
         # Display progress bar for visual context
@@ -859,7 +865,7 @@ elif st.session_state.selected_page == "Fertiliser":
 
 # PAGE: WORKERS
 elif st.session_state.selected_page == "Workers":
-    st.markdown('<h2 style="color: #2D5B2F; font-weight: 700;">👥 Labour & Worker Roster</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #5EEAD4; font-weight: 700;">👥 Labour & Worker Roster</h2>', unsafe_allow_html=True)
     st.write("Log details on worker block assignments, daily rosters and leave statuses.")
     
     w_cols = st.columns(2)
@@ -894,7 +900,7 @@ elif st.session_state.selected_page == "Workers":
     with w_cols[1]:
         st.markdown(textwrap.dedent('''
             <div class="panel-card">
-                <h4 style="margin: 0 0 15px 0; color: #1A231C; font-size: 16px;">Active Block Assignment Roster</h4>
+                <h4 style="margin: 0 0 15px 0; color: #F2FBFB; font-size: 16px;">Active Block Assignment Roster</h4>
                 <table class="cuttings-table">
                     <thead>
                         <tr>
@@ -913,13 +919,13 @@ elif st.session_state.selected_page == "Workers":
 
 # PAGE: TRANSPORT (Log logistics/truck trips)
 elif st.session_state.selected_page == "Transport":
-    st.markdown('<h2 style="color: #2D5B2F; font-weight: 700;">🚚 Logistics & Transport</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #5EEAD4; font-weight: 700;">🚚 Logistics & Transport</h2>', unsafe_allow_html=True)
     st.write("Track haulage vehicle trips, weighbridge statuses, and transport costs.")
     
     col1, col2 = st.columns([1, 2], gap="large")
     
     with col1:
-        st.markdown('<h3 style="color: #2D5B2F; font-size: 18px;">Dispatch New Vehicle</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="color: #5EEAD4; font-size: 18px;">Dispatch New Vehicle</h3>', unsafe_allow_html=True)
         with st.form("new_transport_form", clear_on_submit=True):
             vehicle_id = st.text_input("Vehicle Plate Number", placeholder="e.g. TN 03 EF 9999")
             v_type = st.selectbox("Vehicle Type", ["Lorry", "Trailer", "Tractor"])
@@ -944,7 +950,7 @@ elif st.session_state.selected_page == "Transport":
                     st.rerun()
 
     with col2:
-        st.markdown('<h3 style="color: #2D5B2F; font-size: 18px;">Haulage Logs</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="color: #5EEAD4; font-size: 18px;">Haulage Logs</h3>', unsafe_allow_html=True)
         for idx, trans in enumerate(st.session_state.transport):
             t_cols = st.columns([3, 3, 2, 1])
             with t_cols[0]:
@@ -958,12 +964,12 @@ elif st.session_state.selected_page == "Transport":
                     st.session_state.transport.pop(idx)
                     st.success(f"Trip removed: {trans['id']}")
                     st.rerun()
-            st.markdown('<hr style="margin: 6px 0; border: none; border-bottom: 1px solid #ECEBE6;" />', unsafe_allow_html=True)
+            st.markdown('<hr style="margin: 6px 0; border: none; border-bottom: 1px solid rgba(255,255,255,0.12);" />', unsafe_allow_html=True)
 
 
 # PAGE: PRICING (Change rate per tonne)
 elif st.session_state.selected_page == "Pricing":
-    st.markdown('<h2 style="color: #2D5B2F; font-weight: 700;">🪙 Financial Configurations</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #5EEAD4; font-weight: 700;">🪙 Financial Configurations</h2>', unsafe_allow_html=True)
     st.write("Modify the palm oil harvest pricing parameters to update revenue KPI computations on the dashboard.")
     
     st.markdown("---")
@@ -990,8 +996,8 @@ elif st.session_state.selected_page == "Pricing":
     with p_cols[0]:
         st.markdown(textwrap.dedent(f'''
             <div class="panel-card">
-                <h4 style="margin:0; color:#5C6B5E; font-size: 13px; text-transform: uppercase;">Estimated Earnings summary</h4>
-                <div style="font-size: 28px; font-weight: 700; color: #1A231C; margin: 10px 0;">₹ {total_revenue_rs:,.2f}</div>
-                <p style="font-size:14px; color:#5C6B5E; margin:0;">Calculated from {total_harvest:.1f} total harvest tonnes at ₹ {st.session_state.price_per_tonne:,} rate.</p>
+                <h4 style="margin:0; color:#9FC9CC; font-size: 13px; text-transform: uppercase;">Estimated Earnings summary</h4>
+                <div style="font-size: 28px; font-weight: 700; color: #F2FBFB; margin: 10px 0;">₹ {total_revenue_rs:,.2f}</div>
+                <p style="font-size:14px; color:#9FC9CC; margin:0;">Calculated from {total_harvest:.1f} total harvest tonnes at ₹ {st.session_state.price_per_tonne:,} rate.</p>
             </div>
         '''), unsafe_allow_html=True)
