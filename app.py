@@ -7,7 +7,7 @@ import os
 
 # Set page configuration
 st.set_page_config(
-    page_title="RK Forms",
+    page_title="PalmTrack Estate Manager",
     page_icon="🌴",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -581,13 +581,13 @@ st.markdown(clean_html(f'''
             {banner_svg}
         </div>
         <div>
-            <div class="banner-title">RK Forms</div>
+            <div class="banner-title">PalmTrack Estate Manager</div>
             <div class="banner-subtitle">Configure your estate details</div>
         </div>
     </div>
     <div class="banner-right">
         <div class="banner-today">Today</div>
-        <div class="banner-date">16 Jun 2026</div>
+        <div class="banner-date">{datetime.now().strftime("%d %b %Y")}</div>
     </div>
 </div>
 '''), unsafe_allow_html=True)
@@ -972,7 +972,7 @@ elif st.session_state.selected_page == "Pricing":
     new_price = st.number_input(
         "Current Market Rate per Tonne (INR)", 
         min_value=500, 
-        max_value=100000, 
+        max_value=10000, 
         value=st.session_state.price_per_tonne, 
         step=10,
         help="This is the value used to multiply your total tonnes to calculate revenue."
